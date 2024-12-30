@@ -11,6 +11,17 @@ export const constantRoute = [
             icon: 'Promotion', //菜单文字左侧的图标,支持element-plus全部图标
         },
     },
+    // 注册
+    {
+        path: '/register',
+        component: () => import('@/views/register/index.vue'),
+        name: 'register',
+        meta: {
+            title: '注册',
+            hidden: true,
+            icon: 'Promotion',
+        },
+    },
     // 登录成功以后展示数据的路径
     {
         path: '/',

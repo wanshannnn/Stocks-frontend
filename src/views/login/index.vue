@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { User, Lock } from '@element-plus/icons-vue';
+import { User, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { reactive, ref } from 'vue';
+import { reactive, ref } from 'vue'
 import { useUserInfoStore } from '@/stores'
-import router from "@/router";
+import router from "@/router"
 import { loginAPI } from '@/api/user.ts'
 
 let loginForm = ref({
