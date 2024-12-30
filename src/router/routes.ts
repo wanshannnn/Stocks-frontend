@@ -98,7 +98,7 @@ export const asnycRoute = [
         name: 'Stock',
         meta: {
             title: '股票自选管理',
-            icon: 'Goods',
+            icon: 'Coin',
         },
         redirect: '/stock/collection',
         children: [
@@ -108,7 +108,7 @@ export const asnycRoute = [
                 name: 'Collection',
                 meta: {
                     title: '自选',
-                    icon: 'ShoppingCartFull',
+                    icon: 'CollectionTag',
                 },
             },
             {
@@ -117,7 +117,7 @@ export const asnycRoute = [
                 name: 'Possession',
                 meta: {
                     title: '持有',
-                    icon: 'ChromeFilled',
+                    icon: 'Suitcase',
                 },
             },
         ],

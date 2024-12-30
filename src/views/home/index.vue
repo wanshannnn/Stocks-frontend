@@ -1,8 +1,11 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
-  <div class="home-container"></div>
-  <h1>Stocks</h1>
+  
 </template>
 
-<script></script>
+<style scoped>
 
-<style lang="scss" scoped></style>
+</style>
