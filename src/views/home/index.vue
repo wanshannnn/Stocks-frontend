@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  
+  <h1>最新数据</h1>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

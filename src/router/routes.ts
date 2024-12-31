@@ -25,25 +25,23 @@ export const constantRoute = [
     // 登录成功以后展示数据的路径
     {
         path: '/',
-        component: () => import('@/layout/index.vue'),
-        name: 'home',
+        component: () => import('@/views/layout/index.vue'),
+        name: 'layout',
         meta: {
             title: '',
             hidden: false,
             icon: '',
         },
         redirect: '/home',
-        children: [
-            {
-                path: '/home',
-                component: () => import('@/views/home/index.vue'),
-                meta: {
-                    title: '首页',
-                    hidden: false,
-                    icon: 'HomeFilled',
-                },
-            },
-        ],
+        children: [{
+            path: 'home',
+            component: () => import('../views/home/index.vue'),
+            name: 'home',
+        },{
+            path: '/screen',
+            component: () => import('../views/screen/index.vue'),
+            name: 'screen',
+        }]
     },
     // 404
     {

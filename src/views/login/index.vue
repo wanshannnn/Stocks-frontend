@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { User, Lock } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import { reactive, ref } from 'vue'
-import { useUserInfoStore } from '@/stores'
-import router from "@/router"
-import { loginAPI } from '@/api/user.ts'
+import { User, Lock } from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
+import { ref } from 'vue';
+import { useUserInfoStore } from '@/stores';
+import router from "@/router";
+import { loginAPI } from '@/api/user.ts';
 
 let loginForm = ref({
   username: "",
@@ -39,11 +39,11 @@ const login = async () => {
     }
     // 登陆成功
     ElMessage.success('登陆成功');
-    // 把后端返回的当前登录用户信息存储到Pinia里
+    // 把后端返回的当前登录用户信息存储到 Pinia 里
     userInfoStore.userInfo = res.data;
     console.log(userInfoStore.userInfo);
-    // 跳转到首页
-    router.push('/');
+    // 跳转
+    router.push('/home');
   } else {
     return false;
   }
