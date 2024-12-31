@@ -53,12 +53,12 @@ const login = async () => {
 <template>
   <div class="login_container">
     <el-row>
-      <!-- xs用于响应式布局，令大屏幕下左列留空，右列为登陆表单；小屏幕下左列不显示，只显示登陆表单 -->
+      <!-- xs用于响应式布局，在小屏幕下取消左侧留空-->
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
         <!-- 登陆表单 -->
-        <h1>Stocks 身份认证</h1>
-        <el-form class="login_form">
+        <el-form class="login_form" :model="loginForm" :rule="rules" :ref="loginRef">
+          <h1>Stocks 身份认证</h1>
           <el-form-item prop="username">
             <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
           </el-form-item>
@@ -66,7 +66,7 @@ const login = async () => {
             <el-input :prefix-icon="Lock" v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item class="login_and_register">
-            <el-button class="login_button" type="primary" @click="login">登陆</el-button>
+            <el-button class="login_btn" type="primary" @click="login">登陆</el-button>
             <el-button type="info" @click="$router.push('/register')">去注册</el-button>
           </el-form-item>
         </el-form>
@@ -75,6 +75,103 @@ const login = async () => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 禁止页面滚动 */
+}
+
+.login_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 10vh;
+  height: 100vh;  /* 让容器填充整个视口高度 */
+  background: url('@/assets/images/login_background_pc.png') no-repeat;
+  background-size: cover;  /* 背景图保持比例并填充整个屏幕 */
+  background-position: center center;  /* 背景图居中 */
+
+  /* 用 Flexbox 来确保表单居中 */
+  .login_form {
+    background-color: rgba(255, 255, 255, 0.8);  /* 半透明背景 */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 30vw;
+    height: 40vh;
+    box-sizing: border-box;
+  }
+
+  .login_form h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .el-form-item {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;  /* 让内容在水平上居中 */
+
+    .el-input {
+      width: 100%;
+    }
+
+    .login_and_register {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;  /* 确保容器占满宽度 */
+    }
+
+    .el-button {
+      height: 40px;
+      font-size: 16px;
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 20px;
+      text-align: center;  /* 确保按钮内文字居中 */
+      flex: 1;  /* 每个按钮占据同样的空间 */
+      margin: 5px;  /* 按钮之间的间距 */
+    }
+  }
+}
+
+/* 手机端样式：使用不同的背景图，并调整布局 */
+@media (max-width: 768px) {
+  .login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* 确保容器填充整个屏幕 */
+    background: url('@/assets/images/login_background_mobile.png') no-repeat;
+    background-size: cover;  /* 背景图保持比例并填充整个屏幕 */
+    background-position: center center; /* 背景图居中 */
+
+    .login_form {
+      width: 80vw;  /* 更大的宽度 */
+      height: auto;  /* 高度自适应 */
+      padding: 20px;
+    }
+
+    .login_form h1 {
+      font-size: 20px;  /* 调整标题字体大小 */
+    }
+
+    /* 按钮设置 */
+    .login_and_register {
+      flex-direction: column;  /* 在小屏幕上垂直排列 */
+      justify-content: center;
+      width: 100%;
+    }
+
+    .login_btn, .el-button {
+      width: 100%;  /* 确保按钮宽度为100% */
+      margin: 5px 0;  /* 按钮之间的垂直间距 */
+    }
+  }
+}
 
 </style>
