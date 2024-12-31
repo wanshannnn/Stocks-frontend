@@ -14,9 +14,24 @@ const menuList = [
     icon: 'HomeFilled',
   },
   {
-    title: '数据大屏',
-    path: '/screen',
-    icon: 'Histogram',
+    title: '最新股价',
+    path: '/newest',
+    icon: 'Opportunity',
+  },
+  {
+    title: '股价走势',
+    path: '/trend',
+    icon: 'TrendCharts',
+  },
+  {
+    title: '权限管理',
+    path: '/acl',
+    icon: 'Lock',
+  },
+  {
+    title: '股票自选管理',
+    path: '/stock',
+    icon: 'Coin',
   },
 ]
 

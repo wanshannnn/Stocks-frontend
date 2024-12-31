@@ -38,9 +38,14 @@ export const constantRoute = [
             component: () => import('../views/home/index.vue'),
             name: 'home',
         },{
-            path: '/screen',
-            component: () => import('../views/screen/index.vue'),
-            name: 'screen',
+            path: '/trend',
+            component: () => import('@/views/screen/trend/index.vue'),
+            name: 'Trend',
+        },
+        {
+            path: '/newest',
+            component: () => import('@/views/screen/newest/index.vue'),
+            name: 'Newest',
         }]
     },
     // 404
@@ -54,17 +59,6 @@ export const constantRoute = [
             icon: 'DocumentDelete',
         },
     },
-    // 数据大屏
-    {
-        path: '/screen',
-        component: () => import('@/views/screen/index.vue'),
-        name: 'Screen',
-        meta: {
-            hidden: false,
-            title: '数据大屏',
-            icon: 'Platform',
-        },
-    },
 ]
 
 // 异步路由，拥有特定权限的用户可以访问的页面
@@ -72,7 +66,7 @@ export const asnycRoute = [
     // 管理者页面：管理用户权限和菜单
     {
         path: '/acl',
-        component: () => import('@/layout/index.vue'),
+        component: () => import('@/views/layout/index.vue'),
         name: 'Acl',
         meta: {
             title: '权限管理',
@@ -103,7 +97,7 @@ export const asnycRoute = [
     // 用户页面：管理自选与持有股票
     {
         path: '/stock',
-        component: () => import('@/layout/index.vue'),
+        component: () => import('@/views/layout/index.vue'),
         name: 'Stock',
         meta: {
             title: '股票自选管理',
