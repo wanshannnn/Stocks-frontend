@@ -60,19 +60,18 @@ const samePwd = (rules: any, value: any, callback: any) => {
     callback();
   }
 }
-
 const rules = {
   oldPwd: [
     { required: true, message: '请输入原密码', trigger: 'blur' },
-    { pattern: /^\S{6,15}$/, message: '原密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' }
+    { pattern: /^\S{6,15}$/, message: '原密码必须是6-15位字符长度的非空字符', trigger: 'blur' }
   ],
   newPwd: [
     { required: true, message: '请输入新密码', trigger: 'blur' },
-    { pattern: /^\S{6,15}$/, message: '新密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' }
+    { pattern: /^\S{6,15}$/, message: '新密码必须是6-15位字符长度的非空字符', trigger: 'blur' }
   ],
   rePwd: [
-    { required: true, message: '请再次输入密码', trigger: 'blur' },
-    { pattern: /^\S{6,15}$/, message: '新密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' },
+    { required: true, message: '请再次确认新密码', trigger: 'blur' },
+    { pattern: /^\S{6,15}$/, message: '新密码必须是6-15位字符长度的非空字符', trigger: 'blur' },
     { validator: samePwd, trigger: 'blur' }
   ]
 }
@@ -174,7 +173,7 @@ const quitFn = () => {
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <!-- Github仓库 -->
+          <!-- Github -->
           <el-link href="https://github.com/wanshannnn" style="float: right">
             Github
           </el-link>
