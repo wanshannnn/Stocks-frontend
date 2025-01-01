@@ -6,6 +6,14 @@ import { reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { fixPwdAPI } from '@/api/user';
 
+const isCollapse = ref(false);
+const dialogFormVisible = ref(false);
+const pwdRef = ref();
+const form = reactive({
+  oldPwd: '',
+  newPwd: '',
+  rePwd: '',
+})
 const menuList = [
   {
     title: '首页',
@@ -44,18 +52,10 @@ const menuList = [
   }
 ]
 
-const dialogFormVisible = ref(false)
-const pwdRef = ref()
-const form = reactive({
-  oldPwd: '',
-  newPwd: '',
-  rePwd: '',
-})
-
 // 修改密码的校验规则
 const samePwd = (rules: any, value: any, callback: any) => {
   if (value !== form.newPwd) {
-    callback(new Error('两次输入的密码不一致!'))
+    callback(new Error('两次输入的密码不一致!'));
   } else {
     callback();
   }
@@ -82,63 +82,63 @@ const cancelForm = () => {
     type: 'info',
     message: '已取消修改',
   })
-  dialogFormVisible.value = false
+  dialogFormVisible.value = false;
 }
 
-// 修改密码的方法
+// 修改密码
 const fixPwd = async () => {
-  const valid = await pwdRef.value.validate()
+  const valid = await pwdRef.value.validate();
   if (valid) {
     const submitForm = {
       oldPwd: form.oldPwd,
       newPwd: form.newPwd,
     }
-    console.log('要提交的表单信息')
-    console.log(submitForm)
-    const { data: res } = await fixPwdAPI(submitForm)
-    if (res.code != 0) return
-    ElMessage({
+    console.log('要提交的表单信息');
+    console.log(submitForm);
+    const { data: res } = await fixPwdAPI(submitForm);
+    if (res.code != 0) return ElMessage({
       type: 'success',
       message: '修改成功',
     })
-    dialogFormVisible.value = false
+    dialogFormVisible.value = false;
   } else {
-    return false
+    return false;
   }
 }
 
-const userInfoStore = useUserInfoStore();
+// 侧边栏路径
 const route = useRoute();
 const getActiveAside = () => {
   return route.path;
 };
 
 // 退出登陆时出现确认弹窗
+const userInfoStore = useUserInfoStore();
 const quitFn = () => {
   ElMessageBox.confirm(
-      '请确认退出登录',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      }
+    '请确认退出登录',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
   )
-      .then(() => {
-        ElMessage({
-          type: 'success',
-          message: '退出成功',
-        })
-        // 清除用户信息，包括token
-        userInfoStore.userInfo = null
-        console.log(userInfoStore)
-        router.push('/login')
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: '已取消退出',
-        })
-      })
+  .then(() => {
+    ElMessage({
+      type: 'success',
+      message: '退出成功',
+    })
+    // 清除用户信息，包括token
+    userInfoStore.userInfo = null;
+    console.log(userInfoStore);
+    router.push('/login');
+  })
+  .catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消退出',
+    })
+  })
 }
 </script>
 
@@ -146,14 +146,15 @@ const quitFn = () => {
   <div class="home_container">
     <el-container>
       <!-- 侧边栏 -->
+      <!-- isCollapse 用于判断侧边栏是否展开 -->
       <!-- getActiveAside 用于动态返回当前路由的路径，从而确定哪个菜单项应该被高亮显示。-->
-      <el-menu :default-active="getActiveAside()">
+      <el-menu :default-active="getActiveAside()" :width="isCollapse ? '60px' : '200px'" :collapse="isCollapse">
         <template v-for="item in menuList" :key="item.path">
           <el-menu-item :index="item.path">
             <el-icon>
               <component :is="item.icon" />
             </el-icon>
-            <span>{{ item.title }}</span>
+            <span v-if="!isCollapse">{{ item.title }}</span>
           </el-menu-item>
         </template>
       </el-menu>
@@ -161,6 +162,13 @@ const quitFn = () => {
       <el-container class="header_container">
         <!-- 顶部栏 -->
         <el-header>
+          <!-- 控制侧边栏是否展开 -->
+          <el-icon class="icon" v-if="isCollapse">
+            <Expand @click.stop="isCollapse = !isCollapse" />
+          </el-icon>
+          <el-icon class="icon" v-else>
+            <Fold @click.stop="isCollapse = !isCollapse" />
+          </el-icon>
           <!-- 用户登陆情况 -->
           <el-dropdown style="float: right">
             <el-button type="primary">
@@ -253,6 +261,10 @@ const quitFn = () => {
   &:hover {
     background-color: #BDBDBD;
   }
+}
+
+.el-menu-item .el-icon {
+  margin-left: -8px; /* 使图标略微向左移动 */
 }
 
 .el-menu-item.is-active {
