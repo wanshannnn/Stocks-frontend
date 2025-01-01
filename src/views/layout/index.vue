@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useUserInfoStore } from '@/stores/index.ts';
-import {ElMessage, ElMessageBox} from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router";
-import {ref} from "vue";
-import {useRoute} from "vue-router";
+import { reactive, ref } from "vue";
+import { useRoute } from "vue-router";
+import { fixPwdAPI } from '@/api/user';
 
-const dialogFormVisible = ref(false)
 const menuList = [
   {
     title: '首页',
@@ -43,6 +43,70 @@ const menuList = [
     icon: 'Monitor',
   }
 ]
+
+const dialogFormVisible = ref(false)
+const pwdRef = ref()
+const form = reactive({
+  oldPwd: '',
+  newPwd: '',
+  rePwd: '',
+})
+
+// 修改密码的校验规则
+const samePwd = (rules: any, value: any, callback: any) => {
+  if (value !== form.newPwd) {
+    callback(new Error('两次输入的密码不一致!'))
+  } else {
+    callback();
+  }
+}
+
+const rules = {
+  oldPwd: [
+    { required: true, message: '请输入原密码', trigger: 'blur' },
+    { pattern: /^\S{6,15}$/, message: '原密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' }
+  ],
+  newPwd: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { pattern: /^\S{6,15}$/, message: '新密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' }
+  ],
+  rePwd: [
+    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    { pattern: /^\S{6,15}$/, message: '新密码必须是长度为6-15个字符的大小写字母或数字', trigger: 'blur' },
+    { validator: samePwd, trigger: 'blur' }
+  ]
+}
+
+// 关闭修改密码对话框
+const cancelForm = () => {
+  ElMessage({
+    type: 'info',
+    message: '已取消修改',
+  })
+  dialogFormVisible.value = false
+}
+
+// 修改密码的方法
+const fixPwd = async () => {
+  const valid = await pwdRef.value.validate()
+  if (valid) {
+    const submitForm = {
+      oldPwd: form.oldPwd,
+      newPwd: form.newPwd,
+    }
+    console.log('要提交的表单信息')
+    console.log(submitForm)
+    const { data: res } = await fixPwdAPI(submitForm)
+    if (res.code != 0) return
+    ElMessage({
+      type: 'success',
+      message: '修改成功',
+    })
+    dialogFormVisible.value = false
+  } else {
+    return false
+  }
+}
 
 const userInfoStore = useUserInfoStore();
 const route = useRoute();
@@ -122,6 +186,28 @@ const quitFn = () => {
         </el-main>
       </el-container>
     </el-container>
+
+    <!-- 修改密码对话框 -->
+    <el-dialog v-model="dialogFormVisible" title="修改密码" width="500">
+      <el-form :model="form" :rules="rules" ref="pwdRef">
+        <el-form-item prop="oldPwd" label="原密码" width='80px'>
+          <el-input v-model="form.oldPwd" autocomplete="off" />
+        </el-form-item>
+        <el-form-item prop="newPwd" label="新密码" width='80px'>
+          <el-input v-model="form.newPwd" autocomplete="off" />
+        </el-form-item>
+        <el-form-item prop="rePwd" label="确认密码" width='80px'>
+          <el-input v-model="form.rePwd" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="cancelForm">取消</el-button>
+          <el-button type="primary" @click="fixPwd">确定</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
