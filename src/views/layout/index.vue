@@ -6,7 +6,6 @@ import {ref} from "vue";
 import {useRoute} from "vue-router";
 
 const dialogFormVisible = ref(false)
-const isCollapse = ref(false)
 const menuList = [
   {
     title: '首页',
@@ -24,15 +23,25 @@ const menuList = [
     icon: 'TrendCharts',
   },
   {
-    title: '权限管理',
-    path: '/acl',
-    icon: 'Lock',
+    title: '自选股票',
+    path: '/stock/collection',
+    icon: 'CollectionTag',
   },
   {
-    title: '股票自选管理',
-    path: '/stock',
-    icon: 'Coin',
+    title: '持有股票',
+    path: '/stock/possession',
+    icon: 'Suitcase',
   },
+  {
+    title: '用户管理',
+    path: '/acl/user',
+    icon: 'User',
+  },
+  {
+    title: '菜单管理',
+    path: '/acl/permission',
+    icon: 'Monitor',
+  }
 ]
 
 const userInfoStore = useUserInfoStore();
@@ -44,7 +53,7 @@ const getActiveAside = () => {
 // 退出登陆时出现确认弹窗
 const quitFn = () => {
   ElMessageBox.confirm(
-      '是否确认退出登录',
+      '请确认退出登录',
       {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
@@ -72,10 +81,10 @@ const quitFn = () => {
 
 <template>
   <div class="home_container">
-   <!-- 侧边栏 -->
-    <el-container class="sidebar_container">
-      <el-menu :width="isCollapse ? '640px' : '200px'" :default-active="getActiveAside()" :collapse="isCollapse"
-               background-color="#F7F7F7" text-color="#333333" unique-opened router>
+    <el-container>
+      <!-- 侧边栏 -->
+      <!-- getActiveAside 用于动态返回当前路由的路径，从而确定哪个菜单项应该被高亮显示。-->
+      <el-menu :default-active="getActiveAside()">
         <template v-for="item in menuList" :key="item.path">
           <el-menu-item :index="item.path">
             <el-icon>
@@ -89,6 +98,7 @@ const quitFn = () => {
       <el-container class="header_container">
         <!-- 顶部栏 -->
         <el-header>
+          <!-- 用户登陆情况 -->
           <el-dropdown style="float: right">
             <el-button type="primary">
               {{ userInfoStore.userInfo ? userInfoStore.userInfo.account : '未登录' }}
@@ -100,10 +110,14 @@ const quitFn = () => {
               </el-dropdown-menu>
             </template>
           </el-dropdown>
+          <!-- Github仓库 -->
+          <el-link href="https://github.com/wanshannnn" style="float: right">
+            Github
+          </el-link>
         </el-header>
 
         <!-- 主体部分 -->
-        <el-main>
+        <el-main class="main_container">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -113,8 +127,9 @@ const quitFn = () => {
 
 <style lang="scss" scoped>
 .home_container {
-  height: 100%;
+  height: 100vh;
   background-color: #F7F7F7;
+  display: flex;
 }
 
 .el-header {
@@ -135,5 +150,29 @@ const quitFn = () => {
     }
 
   }
+}
+
+.el-menu {
+  padding: 30px 0 0 0;
+  background-color: #E0E0E0;
+  text-color: #333333;
+}
+
+.el-menu-item {
+  margin: 10px;
+  padding-right: 30px;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #BDBDBD;
+  }
+}
+
+.el-menu-item.is-active {
+  background-color: #333333;
+  color: #E0E0E0;
+  font-weight: bold;
 }
 </style>

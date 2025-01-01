@@ -100,7 +100,7 @@ export const asnycRoute = [
         component: () => import('@/views/layout/index.vue'),
         name: 'Stock',
         meta: {
-            title: '股票自选管理',
+            title: '股票管理',
             icon: 'Coin',
         },
         redirect: '/stock/collection',
@@ -110,7 +110,7 @@ export const asnycRoute = [
                 component: () => import('@/views/stock/collection/index.vue'),
                 name: 'Collection',
                 meta: {
-                    title: '自选',
+                    title: '自选股票',
                     icon: 'CollectionTag',
                 },
             },
@@ -119,7 +119,7 @@ export const asnycRoute = [
                 component: () => import('@/views/stock/possession/index.vue'),
                 name: 'Possession',
                 meta: {
-                    title: '持有',
+                    title: '持有股票',
                     icon: 'Suitcase',
                 },
             },
