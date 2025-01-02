@@ -35,18 +35,49 @@ export const constantRoute = [
         redirect: '/home',
         children: [{
             path: 'home',
-            component: () => import('../views/home/index.vue'),
+            component: () => import('@/views/layout/home/index.vue'),
             name: 'home',
         },{
             path: '/trend',
-            component: () => import('@/views/screen/trend/index.vue'),
-            name: 'Trend',
+            component: () => import('@/views/layout/screen/trend/index.vue'),
+            name: 'trend',
         },
         {
             path: '/newest',
-            component: () => import('@/views/screen/newest/index.vue'),
-            name: 'Newest',
-        }]
+            component: () => import('@/views/layout/screen/newest/index.vue'),
+            name: 'newest',
+        },
+        // 管理者：管理用户权限
+        {
+            path: '/user',
+            component: () => import('@/views/layout/user/index.vue'),
+            name: 'user',
+            meta: {
+                title: '用户管理',
+                icon: 'User',
+            },
+        },
+        // 用户：管理自选股票
+        {
+            path: '/stock/collection',
+            component: () => import('@/views/layout/stock/collection/index.vue'),
+            name: 'collection',
+            meta: {
+                title: '自选股票',
+                icon: 'CollectionTag',
+            },
+        },
+        // 用户：管理持有股票
+        {
+            path: '/stock/possession',
+            component: () => import('@/views/layout/stock/possession/index.vue'),
+            name: 'possession',
+            meta: {
+                title: '持有股票',
+                icon: 'Suitcase',
+            },
+        },
+        ]
     },
     // 404
     {
@@ -61,77 +92,45 @@ export const constantRoute = [
     },
 ]
 
-// 异步路由，拥有特定权限的用户可以访问的页面
-export const asnycRoute = [
-    // 管理者页面：管理用户权限和菜单
-    {
-        path: '/acl',
-        component: () => import('@/views/layout/index.vue'),
-        name: 'Acl',
-        meta: {
-            title: '权限管理',
-            icon: 'Lock',
-        },
-        redirect: '/acl/user',
-        children: [
-            {
-                path: '/acl/user',
-                component: () => import('@/views/acl/user/index.vue'),
-                name: 'User',
-                meta: {
-                    title: '用户管理',
-                    icon: 'User',
-                },
-            },
-            {
-                path: '/acl/permission',
-                component: () => import('@/views/acl/permission/index.vue'),
-                name: 'Permission',
-                meta: {
-                    title: '菜单管理',
-                    icon: 'Monitor',
-                },
-            },
-        ],
-    },
-    // 用户页面：管理自选与持有股票
-    {
-        path: '/stock',
-        component: () => import('@/views/layout/index.vue'),
-        name: 'Stock',
-        meta: {
-            title: '股票管理',
-            icon: 'Coin',
-        },
-        redirect: '/stock/collection',
-        children: [
-            {
-                path: '/stock/collection',
-                component: () => import('@/views/stock/collection/index.vue'),
-                name: 'Collection',
-                meta: {
-                    title: '自选股票',
-                    icon: 'CollectionTag',
-                },
-            },
-            {
-                path: '/stock/possession',
-                component: () => import('@/views/stock/possession/index.vue'),
-                name: 'Possession',
-                meta: {
-                    title: '持有股票',
-                    icon: 'Suitcase',
-                },
-            },
-        ],
-    },
-]
+// // 异步路由，拥有特定权限的用户可以访问的页面（等到实现页面之后再考虑权限分配）
+// export const asnycRoute = [
+//     // 管理者：管理用户权限
+//     {
+//         path: '/user',
+//         component: () => import('@/views/layout/user/index.vue'),
+//         name: 'user',
+//         meta: {
+//             title: '用户管理',
+//             icon: 'User',
+//         },
+//     },
+//     // 用户：管理自选股票
+//     {
+//         path: '/stock/collection',
+//         component: () => import('@/views/layout/stock/collection/index.vue'),
+//         name: 'collection',
+//         meta: {
+//             title: '自选股票',
+//             icon: 'CollectionTag',
+//         },
+//     },
+//     // 用户：管理持有股票
+//     {
+//         path: '/stock/possession',
+//         component: () => import('@/views/layout/stock/possession/index.vue'),
+//         name: 'possession',
+//         meta: {
+//             title: '持有股票',
+//             icon: 'Suitcase',
+//         },
+//     },
+// ]
 
 // 任意路由，用于将任何未匹配到的路径重定向到404页面
 export const anyRoute = {
     path: '/:pathMatch(.*)*',
     redirect: '/404',
-    name: 'Any',
+    name: 'any',
     meta: {
         title: '任意路由',
         hidden: true,

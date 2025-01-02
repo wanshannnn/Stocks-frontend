@@ -42,14 +42,9 @@ const menuList = [
   },
   {
     title: '用户管理',
-    path: '/acl/user',
+    path: '/user',
     icon: 'User',
   },
-  {
-    title: '菜单管理',
-    path: '/acl/permission',
-    icon: 'Monitor',
-  }
 ]
 
 // 修改密码的校验规则
@@ -147,8 +142,11 @@ const quitFn = () => {
     <el-container>
       <!-- 侧边栏 -->
       <!-- isCollapse 用于判断侧边栏是否展开 -->
-      <!-- getActiveAside 用于动态返回当前路由的路径，从而确定哪个菜单项应该被高亮显示。-->
-      <el-menu :default-active="getActiveAside()" :width="isCollapse ? '60px' : '200px'" :collapse="isCollapse">
+      <!-- getActiveAside 用于动态返回当前路由的路径，从而确定哪个菜单项应该被高亮显示 -->
+      <!-- unique-opened router 用于点击侧边栏时进行路径跳转 -->
+      <el-menu :default-active="getActiveAside()"
+               :width="isCollapse ? '60px' : '200px'" :collapse="isCollapse"
+               unique-opened router>
         <template v-for="item in menuList" :key="item.path">
           <el-menu-item :index="item.path">
             <el-icon>
