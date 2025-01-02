@@ -34,7 +34,7 @@ export const constantRoute = [
         },
         redirect: '/home',
         children: [{
-            path: 'home',
+            path: '/home',
             component: () => import('@/views/layout/home/index.vue'),
             name: 'home',
         },{
