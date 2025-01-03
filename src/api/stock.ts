@@ -1,12 +1,13 @@
 import request from '@/utils/request';
+import type {StockInfo} from "@/types/stock.ts";
 
 // 获取最新的股票数据
 export const getLatestStockDataByIdAPI = (id: string) => {
-    return request({
+    return request<{ code: number; data: StockInfo }>({
         url: `/stocks/id/${id}/latest`,
         method: 'get',
     });
-}
+};
 
 // 根据 ID 和时间范围获取股票数据
 export const getStockDataByIdAndTimeRangeAPI = (id: string, startTime: string, endTime: string) => {

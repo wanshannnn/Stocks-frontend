@@ -43,9 +43,9 @@ export const constantRoute = [
             name: 'trend',
         },
         {
-            path: '/newest',
-            component: () => import('@/views/layout/screen/newest/index.vue'),
-            name: 'newest',
+            path: '/latest',
+            component: () => import('@/views/layout/screen/latest/index.vue'),
+            name: 'latest',
         },
         // 管理者：管理用户权限
         {

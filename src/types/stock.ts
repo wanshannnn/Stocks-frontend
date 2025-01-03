@@ -7,5 +7,6 @@ export interface StockInfo {
     amplitude: string;
     name: string;
     highest: string;
-    lowest: string
+    lowest: string;
+    date: string;
 }

@@ -22,7 +22,7 @@ const menuList = [
   },
   {
     title: '最新股价',
-    path: '/newest',
+    path: '/latest',
     icon: 'Opportunity',
   },
   {
