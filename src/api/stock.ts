@@ -8,6 +8,31 @@ export const getLatestStockDataByIdAPI = (id: string) => {
         method: 'get',
     });
 };
+export const getLatestStockDataByNameAPI = (name: string) => {
+    return request<{ code: number; data: StockInfo }>({
+        url: `/stocks/name/${encodeURIComponent(name)}/latest`,
+        method: 'get',
+    });
+};
+
+// 获取最新股票数据（分页）
+export const getLatestStockDataByPageAPI = (page: number, size: number) => {
+    return request<{
+        code: number;
+        data: {
+            items: StockInfo[];
+            total: number;
+        };
+    }>({
+        url: `/stocks/latest/page`,
+        method: 'get',
+        params: {
+            page,
+            size,
+        },
+    });
+};
+
 
 // 根据 ID 和时间范围获取股票数据
 export const getStockDataByIdAndTimeRangeAPI = (id: string, startTime: string, endTime: string) => {

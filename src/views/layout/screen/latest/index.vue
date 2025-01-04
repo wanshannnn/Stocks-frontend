@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getLatestStockDataByIdAPI } from '@/api/stock'; // 引入 API
+import { getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI } from '@/api/stock';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock';
 
 const loading = ref(true);
-const stockData = ref<StockInfo | null>(null);
+const stockData = ref<StockInfo | { items: StockInfo[]; total: number } | null>(null); // 更新类型
+const currentPage = ref(1);
+const pageSize = ref(20);
+const searchQuery = ref('');
 
-// 获取最新股票数据
-const fetchLatestStockData = async () => {
+const fetchStockDataByPage = async (page: number, size: number, query: string = '') => {
   try {
-    const res = await getLatestStockDataByIdAPI('1');
+    let res;
+    if (query.trim()) {
+      if (/^\d+$/.test(query)) {
+        res = await getLatestStockDataByIdAPI(query);
+      } else {
+        res = await getLatestStockDataByNameAPI(query);
+      }
+    } else {
+      res = await getLatestStockDataByPageAPI(page, size);
+    }
+
     if (res.data.code === 0) {
       stockData.value = res.data.data;
     } else {
@@ -19,32 +31,67 @@ const fetchLatestStockData = async () => {
   } catch (error) {
     ElMessage.error('请求失败');
   } finally {
-    loading.value = false; // 加载完成
+    loading.value = false;
   }
 };
 
-// 页面加载时获取数据
 onMounted(() => {
-  fetchLatestStockData();
+  fetchStockDataByPage(currentPage.value, pageSize.value);
 });
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+  fetchStockDataByPage(page, pageSize.value, searchQuery.value);
+};
+
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    loading.value = true;
+    fetchStockDataByPage(1, pageSize.value, searchQuery.value);
+  } else {
+    fetchStockDataByPage(currentPage.value, pageSize.value);
+  }
+};
 </script>
 
 <template>
   <div class="latest-stock-page">
+    <el-row class="header-row" align="middle">
+      <el-col :span="18">
+      </el-col>
+      <el-col :span="6">
+        <el-input
+            v-model="searchQuery"
+            placeholder="输入股票代码或名称"
+            suffix-icon="el-icon-search"
+            clearable
+            @input="handleSearch"
+            class="search-input"
+        />
+      </el-col>
+    </el-row>
+
     <el-card class="stock-card" :loading="loading">
-      <h2 class="title">最新股票数据</h2>
-      <div v-if="stockData">
-        <p><strong>股票名称:</strong> {{ stockData.name }}</p>
-        <p><strong>股票代码:</strong> {{ stockData.id }}</p>
-        <p><strong>当前价格:</strong> {{ stockData.price }}</p>
-        <p><strong>成交量:</strong> {{ stockData.volume }}</p>
-        <p><strong>成交额:</strong> {{ stockData.turnover }}</p>
-        <p><strong>波动幅度:</strong> {{ stockData.amplitude }}</p>
-        <p><strong>最高价:</strong> {{ stockData.highest }}</p>
-        <p><strong>最低价:</strong> {{ stockData.lowest }}</p>
-        <p><strong>更新时间:</strong> {{ stockData.date }}</p>
-      </div>
-      <el-empty v-else description="没有数据" />
+      <el-table :data="stockData && 'items' in stockData ? stockData.items : [stockData]" style="width: 100%">
+        <el-table-column label="股票名称" prop="name"></el-table-column>
+        <el-table-column label="股票代码" prop="code"></el-table-column>
+        <el-table-column label="当前价格" prop="price"></el-table-column>
+        <el-table-column label="成交量" prop="volume"></el-table-column>
+        <el-table-column label="交易所" prop="exchange"></el-table-column>
+        <el-table-column label="成交额" prop="turnover"></el-table-column>
+        <el-table-column label="波动幅度" prop="amplitude"></el-table-column>
+        <el-table-column label="最高价" prop="highest"></el-table-column>
+        <el-table-column label="最低价" prop="lowest"></el-table-column>
+        <el-table-column label="更新时间" prop="date"></el-table-column>
+      </el-table>
+
+      <el-pagination
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :total="stockData && 'total' in stockData ? stockData.total : 0"
+          layout="total, prev, pager, next, jumper"
+          @current-change="handlePageChange"
+      />
     </el-card>
   </div>
 </template>
@@ -54,17 +101,27 @@ onMounted(() => {
   padding: 20px;
 }
 
+.header-row {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.search-input {
+  width: 100%;
+}
+
 .stock-card {
   margin-top: 20px;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-}
-
-.el-empty {
+.el-pagination {
+  margin-top: 20px;
   text-align: center;
 }
 </style>
