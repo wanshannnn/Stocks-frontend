@@ -76,12 +76,12 @@ const handleSearch = () => {
         <el-table-column label="股票名称" prop="name"></el-table-column>
         <el-table-column label="股票代码" prop="code"></el-table-column>
         <el-table-column label="当前价格" prop="price"></el-table-column>
-        <el-table-column label="成交量" prop="volume"></el-table-column>
-        <el-table-column label="交易所" prop="exchange"></el-table-column>
-        <el-table-column label="成交额" prop="turnover"></el-table-column>
-        <el-table-column label="波动幅度" prop="amplitude"></el-table-column>
-        <el-table-column label="最高价" prop="highest"></el-table-column>
-        <el-table-column label="最低价" prop="lowest"></el-table-column>
+        <el-table-column label="成交额" prop="volume"></el-table-column>
+        <el-table-column label="涨跌幅" prop="exchange"></el-table-column>
+        <el-table-column label="成交量" prop="turnover"></el-table-column>
+        <el-table-column label="振幅" prop="amplitude"></el-table-column>
+        <el-table-column label="最高" prop="highest"></el-table-column>
+        <el-table-column label="最低" prop="lowest"></el-table-column>
         <el-table-column label="更新时间" prop="date"></el-table-column>
       </el-table>
 

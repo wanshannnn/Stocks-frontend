@@ -5,7 +5,7 @@ function generateStockCode(id: number): string {
     return id.toString().padStart(6, '0');
 }
 
-// 根据 id 获取股票数据
+// 模拟根据股票 id 获取股票数据
 Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
     const id = options.url.match(/\/stocks\/id\/(\d+)\/latest/)[1];
     return {
@@ -27,7 +27,7 @@ Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
 });
 
 
-// 根据 name 获取股票数据
+// 模拟根据股票 name 获取股票数据
 Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
     const name = decodeURIComponent(options.url.match(/\/stocks\/name\/([^/]+)\/latest/)[1]);
     return {
@@ -49,7 +49,7 @@ Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
 });
 
 
-// 分页获取最新股票数据
+// 模拟分页获取最新股票数据
 const getLatestStockDataByPageMockAPI = Mock.mock({
     'items|200': [
         {
@@ -80,5 +80,59 @@ Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
             items,
             total: getLatestStockDataByPageMockAPI.items.length,
         }
+    };
+});
+
+
+// 模拟用户自选股票数据
+Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
+    const userId = options.url.match(/\/stocks\/userId\/(\d+)\/collection/)[1];
+
+    // 模拟一个用户自选股票的列表
+    const stockList = Array.from({ length: 5 }).map((_, index) => ({
+        userId: userId,
+        stockId: index + 1,
+        code: generateStockCode(index + 1),
+        name: Mock.mock('@ctitle(3, 5)'),
+        price: Mock.mock('@float(10, 1000, 0, 2)'),
+        volume: Mock.mock('@integer(1000, 10000)'),
+        exchange: Mock.mock('@integer(1000, 10000)'),
+        turnover: Mock.mock('@integer(1000, 10000)'),
+        amplitude: Mock.mock('@integer(1000, 10000)'),
+        highest: Mock.mock('@integer(1000, 10000)'),
+        lowest: Mock.mock('@integer(1000, 10000)'),
+        date: Mock.mock('@date("yyyy-MM-dd")'),
+    }));
+
+    return {
+        code: 0,
+        data: stockList,
+    };
+});
+
+
+// 模拟用户持有股票数据
+Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
+    const userId = options.url.match(/\/stocks\/userId\/(\d+)\/possession/)[1];
+
+    // 模拟一个用户自选股票的列表
+    const stockList = Array.from({ length: 5 }).map((_, index) => ({
+        userId: userId,
+        stockId: index + 1,
+        code: generateStockCode(index + 1),
+        name: Mock.mock('@ctitle(3, 5)'),
+        price: Mock.mock('@float(10, 1000, 0, 2)'),
+        volume: Mock.mock('@integer(1000, 10000)'),
+        exchange: Mock.mock('@integer(1000, 10000)'),
+        turnover: Mock.mock('@integer(1000, 10000)'),
+        amplitude: Mock.mock('@integer(1000, 10000)'),
+        highest: Mock.mock('@integer(1000, 10000)'),
+        lowest: Mock.mock('@integer(1000, 10000)'),
+        date: Mock.mock('@date("yyyy-MM-dd")'),
+    }));
+
+    return {
+        code: 0,
+        data: stockList,
     };
 });

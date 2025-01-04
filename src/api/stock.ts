@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 import type {StockInfo} from "@/types/stock.ts";
 
-// 获取最新的股票数据
+// 根据股票 id 或 name 查询最新的股票数据
 export const getLatestStockDataByIdAPI = (id: string) => {
     return request<{ code: number; data: StockInfo }>({
         url: `/stocks/id/${id}/latest`,
@@ -33,6 +33,22 @@ export const getLatestStockDataByPageAPI = (page: number, size: number) => {
     });
 };
 
+// 根据用户 id 查找自选股票
+export const getCollectionStockDataByUserIdAPI = (userId: string) => {
+    return request<{ code: number; data: StockInfo }>({
+        url: `/stocks/userId/${userId}/collection`,
+        method: 'get',
+    });
+};
+
+// 根据用户 id 查找持有股票
+export const getPossessionStockDataByUserIdAPI = (userId: string) => {
+    return request<{ code: number; data: StockInfo }>({
+        url: `/stocks/userId/${userId}/possession`,
+        method: 'get',
+    });
+};
+
 
 // 根据 ID 和时间范围获取股票数据
 export const getStockDataByIdAndTimeRangeAPI = (id: string, startTime: string, endTime: string) => {
@@ -57,7 +73,7 @@ export const deleteStockDataByIdAndTimeRangeAPI = (id: string, startTime: string
     return request({
         url: `/stocks/id/${id}/delete`,
         method: 'delete',
-        params: { startTime, endTime },  // 使用 params 传递查询参数
+        params: { startTime, endTime },
     });
 }
 
@@ -66,7 +82,7 @@ export const addStockDataAPI = (stockData: any) => {
     return request({
         url: '/stocks/add',
         method: 'post',
-        data: stockData,  // 使用 data 传递请求体数据
+        data: stockData,
     });
 }
 
@@ -75,6 +91,6 @@ export const updateStockDataByIdAPI = (id: string, stockData: any) => {
     return request({
         url: `/stocks/id/${id}/update`,
         method: 'put',
-        data: stockData,  // 使用 data 传递请求体数据
+        data: stockData,
     });
 }
