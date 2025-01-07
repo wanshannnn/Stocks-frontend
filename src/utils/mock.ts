@@ -72,7 +72,9 @@ const getLatestStockDataByPageMockAPI = Mock.mock({
     ]
 });
 Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
-    const { page = 10, size = 20 } = options.url.match(/page=(\d+)&size=(\d+)/)?.groups || {};
+    const urlParams = new URLSearchParams(options.url.split('?')[1]);
+    const page = parseInt(urlParams.get('page') || '1');
+    const size = parseInt(urlParams.get('size') || '20');
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
     const items = getLatestStockDataByPageMockAPI.items.slice(startIndex, endIndex);
@@ -89,8 +91,6 @@ Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
 // 模拟用户自选股票数据
 Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
     const userId = options.url.match(/\/stocks\/userId\/(\d+)\/collection/)[1];
-
-    // 模拟一个用户自选股票的列表
     const stockList = Array.from({ length: 5 }).map((_, index) => ({
         userId: userId,
         stockId: index + 1,
@@ -105,7 +105,6 @@ Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
         lowest: Mock.mock('@integer(1000, 10000)'),
         date: Mock.mock('@date("yyyy-MM-dd")'),
     }));
-
     return {
         code: 0,
         data: stockList,
@@ -116,8 +115,6 @@ Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
 // 模拟用户持有股票数据
 Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
     const userId = options.url.match(/\/stocks\/userId\/(\d+)\/possession/)[1];
-
-    // 模拟一个用户自选股票的列表
     const stockList = Array.from({ length: 5 }).map((_, index) => ({
         userId: userId,
         stockId: index + 1,
@@ -132,7 +129,6 @@ Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
         lowest: Mock.mock('@integer(1000, 10000)'),
         date: Mock.mock('@date("yyyy-MM-dd")'),
     }));
-
     return {
         code: 0,
         data: stockList,
@@ -156,11 +152,9 @@ Mock.mock(/\/user\/page/, 'get', (options: any) => {
     const urlParams = new URLSearchParams(options.url.split('?')[1]);
     const page = parseInt(urlParams.get('page') || '1');
     const size = parseInt(urlParams.get('size') || '20');
-
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
     const items = userPageListMockAPI.items.slice(startIndex, endIndex);
-
     return {
         code: 0,
         data: {

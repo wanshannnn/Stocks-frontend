@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { ElTable, ElButton, ElPagination, ElDialog, ElForm, ElInput, ElSelect, ElOption, ElMessage } from 'element-plus';
-import { getUserPageListAPI, addUserAPI, updateUserAPI, deleteUserAPI } from '@/api/user';
+import {getUserPageListAPI, addUserAPI, updateUserAPI, deleteUserAPI} from '@/api/user';
 import type { UserInfo } from "@/types/user";
 
 const currentPage = ref(1);
@@ -10,21 +10,20 @@ const userList = ref<{ items: UserInfo[]; total: number } | null>(null);
 const loading = ref(true);
 const showDialog = ref(false);
 const currentUser = ref<any>(null);
-const totalUsers = ref(0);
 
 
-const fetchUsersByPage = async (page: number, size: number, query: string = '') => {
+const fetchUsersByPage = async (page: number, size: number) => {
   loading.value = true;
   try {
-    const res = await getUserPageListAPI({
+    let res;
+    res = await getUserPageListAPI({
       page: page,
       size: size
     });
     if (res.data.code === 0) {
-      userList.value = res.data.data.items;
-      totalUsers.value = res.data.data.total;
+      userList.value = res.data.data;
     } else {
-      ElMessage.error('获取用户列表失败');
+      ElMessage.error('获取数据失败');
     }
   } catch (error) {
     ElMessage.error('请求失败');
@@ -32,6 +31,7 @@ const fetchUsersByPage = async (page: number, size: number, query: string = '') 
     loading.value = false;
   }
 };
+
 
 const openDialog = (user: any = null) => {
   currentUser.value = user ? { ...user } : { username: '', account: '', status: true };
@@ -47,7 +47,7 @@ const handleAddUser = async () => {
     const res = await addUserAPI(currentUser.value);
     if (res.code === 0) {
       ElMessage.success('添加用户成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);  // 确保刷新数据
+      fetchUsersByPage(currentPage.value, pageSize.value);
       closeDialog();
     } else {
       ElMessage.error('添加用户失败');
@@ -62,7 +62,7 @@ const handleUpdateUser = async () => {
     const res = await updateUserAPI(currentUser.value);
     if (res.code === 0) {
       ElMessage.success('更新用户信息成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);  // 确保刷新数据
+      fetchUsersByPage(currentPage.value, pageSize.value);
       closeDialog();
     } else {
       ElMessage.error('更新用户信息失败');
@@ -77,7 +77,7 @@ const handleDeleteUser = async (id: number) => {
     const res = await deleteUserAPI(id);
     if (res.code === 0) {
       ElMessage.success('删除用户成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);  // 确保刷新数据
+      fetchUsersByPage(currentPage.value, pageSize.value);
     } else {
       ElMessage.error('删除用户失败');
     }
@@ -87,7 +87,7 @@ const handleDeleteUser = async (id: number) => {
 };
 
 onMounted(() => {
-  fetchUsersByPage(currentPage.value, pageSize.value);  // 修复：调用分页函数
+  fetchUsersByPage(currentPage.value, pageSize.value);
 });
 
 const handlePageChange = (page: number) => {
@@ -97,9 +97,9 @@ const handlePageChange = (page: number) => {
 </script>
 
 <template>
-  <div>
+  <div class="user-manage-container">
     <el-button type="primary" @click="openDialog">添加用户</el-button>
-    <el-table :data="userList" style="width: 100%">
+    <el-table class="user-table" :data="userList?.items" style="width: 100%">
       <el-table-column label="用户名" prop="username"></el-table-column>
       <el-table-column label="账户" prop="account"></el-table-column>
       <el-table-column label="状态" prop="status">
@@ -116,18 +116,27 @@ const handlePageChange = (page: number) => {
     </el-table>
 
     <el-pagination
-        v-if="userList && userList.total > 0"
-    :current-page="currentPage"
-    :page-size="pageSize"
-    :total="userList?.total"
-    layout="total, prev, pager, next, jumper"
-    @current-change="handlePageChange"
+      v-if="userList && userList.total > 0"
+      v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
+      :total="userList?.total"
+      layout="total, prev, pager, next, jumper"
+      @current-change="handlePageChange"
     />
   </div>
 </template>
 
 <style scoped>
-.el-table {
+.user-manage-container {
+  padding: 20px;
+}
+
+.user-table {
   margin-top: 20px;
+}
+
+.el-pagination {
+  margin-top: 20px;
+  text-align: center;
 }
 </style>

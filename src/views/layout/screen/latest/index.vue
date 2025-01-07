@@ -1,28 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import { getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI } from '@/api/stock';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock';
 
-const loading = ref(true);
-const stockData = ref<StockInfo | { items: StockInfo[]; total: number } | null>(null); // 更新类型
+const loading = ref(false);
+const stockData = ref<StockInfo | { items: StockInfo[]; total: number } | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(20);
 const searchQuery = ref('');
 
-const fetchStockDataByPage = async (page: number, size: number, query: string = '') => {
+const fetchStockDataByPage = async (page: number, size: number, id: string = '') => {
+  loading.value = true;
   try {
     let res;
-    if (query.trim()) {
-      if (/^\d+$/.test(query)) {
-        res = await getLatestStockDataByIdAPI(query);
+    if (id.trim()) {
+      if (/^\d+$/.test(id)) {
+        res = await getLatestStockDataByIdAPI(id);
       } else {
-        res = await getLatestStockDataByNameAPI(query);
+        res = await getLatestStockDataByNameAPI(id);
       }
     } else {
-      res = await getLatestStockDataByPageAPI(page, size);
+      res = await getLatestStockDataByPageAPI({
+        page: page,
+        size: size
+      });
     }
-
     if (res.data.code === 0) {
       stockData.value = res.data.data;
     } else {
@@ -34,6 +37,10 @@ const fetchStockDataByPage = async (page: number, size: number, query: string = 
     loading.value = false;
   }
 };
+
+watch([currentPage, pageSize], ([newPage, newSize]) => {
+  fetchUsersByPage(newPage, newSize);
+});
 
 onMounted(() => {
   fetchStockDataByPage(currentPage.value, pageSize.value);
@@ -55,8 +62,8 @@ const handleSearch = () => {
 </script>
 
 <template>
-  <div class="latest-stock-page">
-    <el-row class="header-row" align="middle">
+  <div class="latest-stock-container">
+    <el-row class="search-container" align="middle">
       <el-col :span="18">
       </el-col>
       <el-col :span="6">
@@ -72,7 +79,7 @@ const handleSearch = () => {
     </el-row>
 
     <el-card class="stock-card" :loading="loading">
-      <el-table :data="stockData && 'items' in stockData ? stockData.items : [stockData]" style="width: 100%">
+      <el-table :data="stockData?.items" style="width: 100%">
         <el-table-column label="股票名称" prop="name"></el-table-column>
         <el-table-column label="股票代码" prop="code"></el-table-column>
         <el-table-column label="当前价格" prop="price"></el-table-column>
@@ -86,9 +93,10 @@ const handleSearch = () => {
       </el-table>
 
       <el-pagination
-          :current-page="currentPage"
-          :page-size="pageSize"
-          :total="stockData && 'total' in stockData ? stockData.total : 0"
+          v-if="stockData && stockData.total > 0"
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :total="stockData?.total"
           layout="total, prev, pager, next, jumper"
           @current-change="handlePageChange"
       />
@@ -97,19 +105,12 @@ const handleSearch = () => {
 </template>
 
 <style scoped>
-.latest-stock-page {
+.latest-stock-container {
   padding: 20px;
 }
 
-.header-row {
+search-container {
   margin-bottom: 20px;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-  margin: 0;
 }
 
 .search-input {

@@ -16,20 +16,10 @@ export const getLatestStockDataByNameAPI = (name: string) => {
 };
 
 // 获取最新股票数据（分页）
-export const getLatestStockDataByPageAPI = (page: number, size: number) => {
-    return request<{
-        code: number;
-        data: {
-            items: StockInfo[];
-            total: number;
-        };
-    }>({
-        url: `/stocks/latest/page`,
+export const getLatestStockDataByPageAPI = (params: any) => {
+    return request({
+        url: `/stocks/latest/page?page=${params.page}&size=${params.size}`,
         method: 'get',
-        params: {
-            page,
-            size,
-        },
     });
 };
 
