@@ -1,9 +1,11 @@
 import Mock from 'mockjs';
 
+
 // 自定义函数格式化为六位数的股票代码
 function generateStockCode(id: number): string {
     return id.toString().padStart(6, '0');
 }
+
 
 // 模拟根据股票 id 获取股票数据
 Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
@@ -134,5 +136,63 @@ Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
     return {
         code: 0,
         data: stockList,
+    };
+});
+
+
+// 模拟分页展示用户数据
+const userPageListMockAPI = Mock.mock({
+    'items|200': [
+        {
+            'id|+1': 1,
+            username: '@cname',
+            account: '@integer(0, 1000)',
+            status: '@boolean',
+            createTime: '@date("yyyy-MM-dd")',
+        }
+    ]
+});
+Mock.mock(/\/user\/page/, 'get', (options: any) => {
+    const urlParams = new URLSearchParams(options.url.split('?')[1]);
+    const page = parseInt(urlParams.get('page') || '1');
+    const size = parseInt(urlParams.get('size') || '20');
+
+    const startIndex = (page - 1) * size;
+    const endIndex = startIndex + size;
+    const items = userPageListMockAPI.items.slice(startIndex, endIndex);
+
+    return {
+        code: 0,
+        data: {
+            items,
+            total: userPageListMockAPI.items.length,
+        },
+    };
+});
+
+
+// 模拟添加用户信息
+Mock.mock(/\/user\/add/, 'post', (options: any) => {
+    return {
+        code: 0,
+        message: '添加成功',
+    };
+});
+
+
+// 模拟更新用户信息
+Mock.mock(/\/user\/update/, 'put', (options: any) => {
+    return {
+        code: 0,
+        message: '更新成功',
+    };
+});
+
+
+// 模拟删除用户信息
+Mock.mock(/\/user\/delete\/\d+/, 'delete', (options: any) => {
+    return {
+        code: 0,
+        message: '删除成功',
     };
 });

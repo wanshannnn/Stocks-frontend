@@ -62,13 +62,11 @@ export const addUserAPI = (params: any) => {
  * @returns
  */
 export const getUserPageListAPI = (params: any) => {
-    console.log(params)
     return request({
-        url: '/user/page',
+        url: `/user/page?page=${params.page}&size=${params.size}`,
         method: 'get',
-        params
-    })
-}
+    });
+};
 
 /**
  * 根据id获取用户信息，用于回显
