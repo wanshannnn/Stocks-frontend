@@ -185,8 +185,9 @@ Mock.mock(/\/user\/update/, 'put', (options: any) => {
 
 // 模拟删除用户信息
 Mock.mock(/\/user\/delete\/\d+/, 'delete', (options: any) => {
+    const id = options.url.match(/\/user\/delete\/(\d+)/)?.[1];
     return {
         code: 0,
-        message: '删除成功',
+        message: `用户删除成功 (ID: ${id})`,
     };
 });

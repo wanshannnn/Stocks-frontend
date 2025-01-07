@@ -1,104 +1,106 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { ElTable, ElButton, ElPagination, ElDialog, ElForm, ElInput, ElSelect, ElOption, ElMessage } from 'element-plus';
-import {getUserPageListAPI, addUserAPI, updateUserAPI, deleteUserAPI} from '@/api/user';
+import { ref, reactive, onMounted } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { getUserPageListAPI, addUserAPI } from '@/api/user';
 import type { UserInfo } from "@/types/user";
 
+// 数据与状态
 const currentPage = ref(1);
 const pageSize = ref(20);
 const userList = ref<{ items: UserInfo[]; total: number } | null>(null);
-const loading = ref(true);
-const showDialog = ref(false);
-const currentUser = ref<any>(null);
+const loading = ref(false);
+const dialogVisible = ref(false);
+const userForm = ref(null);
+const form = reactive({
+  username: '',
+  account: '',
+});
 
+// 校验规则
+const rules = {
+  username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+  account: [{ required: true, message: '账户不能为空', trigger: 'blur' }],
+};
 
+// 获取用户分页数据
 const fetchUsersByPage = async (page: number, size: number) => {
   loading.value = true;
   try {
-    let res;
-    res = await getUserPageListAPI({
-      page: page,
-      size: size
-    });
+    const res = await getUserPageListAPI({ page, size });
     if (res.data.code === 0) {
       userList.value = res.data.data;
     } else {
-      ElMessage.error('获取数据失败');
+      ElMessage.error(res.data.message || '获取数据失败');
     }
   } catch (error) {
-    ElMessage.error('请求失败');
+    ElMessage.error('请求失败，请稍后重试');
   } finally {
     loading.value = false;
   }
 };
 
-
-const openDialog = (user: any = null) => {
-  currentUser.value = user ? { ...user } : { username: '', account: '', status: true };
-  showDialog.value = true;
+// 取消表单
+const cancelForm = () => {
+  ElMessage.info('已取消操作');
+  dialogVisible.value = false;
 };
 
-const closeDialog = () => {
-  showDialog.value = false;
-};
-
-const handleAddUser = async () => {
-  try {
-    const res = await addUserAPI(currentUser.value);
-    if (res.code === 0) {
-      ElMessage.success('添加用户成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);
-      closeDialog();
-    } else {
-      ElMessage.error('添加用户失败');
-    }
-  } catch (error) {
-    ElMessage.error('请求失败');
+// 添加用户
+const addUser = async () => {
+  if (!userForm.value) {
+    return;
   }
-};
-
-const handleUpdateUser = async () => {
-  try {
-    const res = await updateUserAPI(currentUser.value);
-    if (res.code === 0) {
-      ElMessage.success('更新用户信息成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);
-      closeDialog();
-    } else {
-      ElMessage.error('更新用户信息失败');
+  userForm.value.validate(async (valid: boolean) => {
+    if (!valid) {
+      ElMessage.error('表单校验失败，请检查输入内容');
+      return;
     }
-  } catch (error) {
-    ElMessage.error('请求失败');
-  }
-};
-
-const handleDeleteUser = async (id: number) => {
-  try {
-    const res = await deleteUserAPI(id);
-    if (res.code === 0) {
-      ElMessage.success('删除用户成功');
-      fetchUsersByPage(currentPage.value, pageSize.value);
-    } else {
-      ElMessage.error('删除用户失败');
+    try {
+      const response = await addUserAPI(form);
+      if (response.data.code === 0) {
+        ElMessage.success('用户添加成功');
+        dialogVisible.value = false;
+        form.username = '';
+        form.account = '';
+        fetchUsersByPage(currentPage.value, pageSize.value);
+      } else {
+        ElMessage.error(response.data.message || '添加用户失败');
+      }
+    } catch (error) {
+      ElMessage.error('请求失败，请稍后重试');
     }
-  } catch (error) {
-    ElMessage.error('请求失败');
-  }
+  });
 };
 
 onMounted(() => {
   fetchUsersByPage(currentPage.value, pageSize.value);
 });
-
-const handlePageChange = (page: number) => {
-  currentPage.value = page;
-  fetchUsersByPage(page, pageSize.value);
-};
 </script>
+
 
 <template>
   <div class="user-manage-container">
-    <el-button type="primary" @click="openDialog">添加用户</el-button>
+    <!-- 添加用户 -->
+    <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
+    <!-- 添加用户对话框 -->
+    <el-dialog v-model="dialogVisible" title="添加用户" width="500">
+      <el-form :model="form" :rules="rules" :ref="userForm" label-width="100px">
+        <el-form-item prop="username" label="用户名" :label-width="80">
+          <el-input v-model="form.username" autocomplete="off" />
+        </el-form-item>
+      <el-form-item prop="account" label="账户" :label-width="80">
+        <el-input v-model="form.account" autocomplete="off" />
+      </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="cancelForm">Cancel</el-button>
+          <el-button type="primary" @click="addUser">Confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 分页展示用户信息 -->
     <el-table class="user-table" :data="userList?.items" style="width: 100%">
       <el-table-column label="用户名" prop="username"></el-table-column>
       <el-table-column label="账户" prop="account"></el-table-column>
@@ -115,6 +117,7 @@ const handlePageChange = (page: number) => {
       </el-table-column>
     </el-table>
 
+    <!-- 分页组件 -->
     <el-pagination
       v-if="userList && userList.total > 0"
       v-model:current-page="currentPage"
@@ -123,6 +126,28 @@ const handlePageChange = (page: number) => {
       layout="total, prev, pager, next, jumper"
       @current-change="handlePageChange"
     />
+
+    <!-- 用户信息弹窗 -->
+    <el-dialog :visible.sync="showDialog" title="用户信息">
+      <el-form ref="userForm" :model="currentUser" :rules="rules" label-width="100px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="currentUser.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="账户" prop="account">
+          <el-input v-model="currentUser.account" placeholder="请输入账户"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="currentUser.status" placeholder="请选择状态">
+            <el-option label="激活" :value="true"></el-option>
+            <el-option label="禁用" :value="false"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="handleSaveUser">Confirm</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
