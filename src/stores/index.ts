@@ -17,6 +17,11 @@ export const useUserInfoStore = defineStore('userInfo', {
         setUserInfo(userInfo: UserInfo) {
             this.userInfo = userInfo;
         },
+        $reset() {
+            this.userInfo = null;
+            this.isAuthenticated = false;
+            this.roles = [];
+        },
     },
     persist: true,
 })

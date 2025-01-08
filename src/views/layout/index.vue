@@ -163,7 +163,7 @@ const quitFn = () => {
           <!-- 用户登陆情况 -->
           <el-dropdown style="float: right">
             <el-button type="primary">
-              {{ userInfoStore.userInfo ? userInfoStore.userInfo.account : '未登录' }}
+              {{ userInfoStore.userInfo ? userInfoStore.userInfo.username : '未登录' }}
             </el-button>
             <template #dropdown>
               <el-dropdown-menu>

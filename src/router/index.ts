@@ -5,7 +5,12 @@ import { useUserInfoStore } from '@/stores/index.ts';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: constantRoute,
-  scrollBehavior: () => ({ left: 0, top: 0 }), // 简化滚动行为
+  scrollBehavior(to) {
+    if (to.hash) {
+      return { el: to.hash }; // 支持锚点导航
+    }
+    return { left: 0, top: 0 };
+  },
 });
 
 // 路由守卫
@@ -13,58 +18,50 @@ router.beforeEach(async (to, from, next) => {
   const userInfoStore = useUserInfoStore();
   const { roles, isAuthenticated } = userInfoStore;
 
+  // 未认证用户逻辑
   if (!isAuthenticated) {
-    handleUnauthenticatedUser(to, next);
-  } else {
-    handleAuthenticatedUser(to, next, roles);
+    if (['/login', '/register'].includes(to.path)) {
+      return next(); // 放行登录或注册页
+    }
+    return next('/login'); // 未认证用户重定向到登录页
   }
-});
 
-// 处理未认证用户的跳转逻辑
-function handleUnauthenticatedUser(to, next) {
-  if (to.path !== '/login') {
-    return next('/login'); // 重定向到登录页
-  }
-  return next(); // 放行登录页
-}
-
-// 处理已认证用户的跳转逻辑
-function handleAuthenticatedUser(to, next, roles) {
+  // 已登录用户逻辑
   if (to.path === '/login') {
-    return next('/'); // 登录后禁止访问登录页，重定向到主页
+    return next('/'); // 登录后禁止访问登录页
   }
 
-  if (!router.hasRoute('user')) {
-    // 动态添加路由
-    addDynamicRoutes(roles);
-    return next({ ...to, replace: true }); // 确保路由生效
+  addDynamicRoutes(roles);
+
+  // 检查目标路径是否有权限
+  const targetRoute = router.getRoutes().find((route) => route.path === to.path);
+  if (targetRoute?.meta?.roles) {
+    const hasPermission = roles.some((role) => targetRoute.meta.roles.includes(role));
+    if (!hasPermission) {
+      return next('/404'); // 无权限跳转到404
+    }
   }
 
-  // 确保当前路径有效
-  if (!isRouteValid(to.path)) {
-    return next('/404'); // 无效路径跳转到404
-  }
-
-  return next(); // 放行当前导航
-}
-
-// 动态添加路由
-function addDynamicRoutes(roles) {
-  const accessibleRoutes = filterAsyncRoutes(asyncRoute, roles);
-  accessibleRoutes.forEach((route) => router.addRoute(route));
-  router.addRoute(anyRoute); // 添加任意路由
-}
-
-// 验证路径有效性
-function isRouteValid(path) {
-  return router.getRoutes().some((route) => route.path === path);
-}
+  next(); // 放行
+});
 
 // 根据用户角色过滤路由
 function filterAsyncRoutes(routes, roles) {
   return routes.filter((route) => {
-    return !route.meta?.roles || roles.some((role) => route.meta.roles.includes(role));
+    const routeRoles = route.meta?.roles;
+    // 如果路由没有角色限制，所有用户都可访问
+    if (!routeRoles) {
+      return true;
+    }
+    // 如果有角色限制，严格匹配用户角色
+    return roles.some((role) => routeRoles.includes(role));
   });
+}
+
+function addDynamicRoutes(roles) {
+  const accessibleRoutes = filterAsyncRoutes(asyncRoute, roles);
+  accessibleRoutes.forEach((route) => router.addRoute(route));
+  router.addRoute(anyRoute); // 添加通配路由（404）
 }
 
 export default router;

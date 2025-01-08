@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const form = ref({
-  account: '',
+  username: '',
   password: '',
   repassword: '',
 })
@@ -20,9 +20,9 @@ const samePwd = (rules: any, value: any, callback: any) => {
   }
 }
 const rules = {
-  account: [
+  username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    {pattern: /^[a-zA-Z0-9]{1,10}$/, message: '用户名必须是1-10位字符长度的大小写字母或数字', trigger: 'blur'}
+    { pattern: /^[a-zA-Z0-9]{1,10}$/, message: '用户名必须是1-10位字符长度的大小写字母或数字', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -119,8 +119,8 @@ const registerFn = async () => {
     <div class="register_container">
       <div class="title_container">注 册</div>
       <el-form :model="form" label-width="0px" :rules="rules" ref="registerRef">
-        <el-form-item prop="account">
-          <el-input placeholder="请输入用户名" v-model="form.account"></el-input>
+        <el-form-item prop="username">
+          <el-input placeholder="请输入用户名" v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input type="password" placeholder="请输入密码" v-model="form.password"></el-input>

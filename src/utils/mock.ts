@@ -29,6 +29,37 @@ Mock.mock('/api/user/login', 'post', (options) => {
     };
 });
 
+// 模拟注册接口
+Mock.mock('/api/user/register', 'post', (options) => {
+    const {username, password, repassword} = JSON.parse(options.body);
+    return {
+        code: 0,
+        message: '注册成功',
+        data: {
+            id: 1,
+            username,
+        },
+    };
+});
+
+// 模拟修改密码接口
+Mock.mock('/api/user/fixpwd', 'put', (options) => {
+    const { oldPassword, newPassword } = JSON.parse(options.body);
+    if (oldPassword === '123456') {
+        return {
+            code: 0,
+            message: '密码修改成功',
+            data: null,
+        };
+    }
+    return {
+        code: 1,
+        message: '密码修改失败，旧密码不正确',
+        data: null,
+    };
+});
+
+
 // 自定义函数格式化为六位数的股票代码
 function generateStockCode(id: number): string {
     return id.toString().padStart(6, '0');
