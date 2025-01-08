@@ -1,10 +1,22 @@
-import { defineStore } from 'pinia'
-import type { UserInfo } from '@/types/user.ts'  // 引入用户信息的类型
-import { ref } from 'vue'
+import { defineStore } from 'pinia';
+import type { UserInfo } from '@/types/user.ts';
 
 export const useUserInfoStore = defineStore('userInfo', {
     state: () => ({
-        userInfo: ref<UserInfo | null>(null),  // 定义用户信息的初始状态
+        userInfo: null as UserInfo | null,
+        roles: [] as string[],
+        isAuthenticated: false,
     }),
-    persist: true,  // 持久化存储用户信息
+    actions: {
+        setRoles(roles: string[]) {
+            this.roles = roles;
+        },
+        setAuthenticated(status: boolean) {
+            this.isAuthenticated = status;
+        },
+        setUserInfo(userInfo: UserInfo) {
+            this.userInfo = userInfo;
+        },
+    },
+    persist: true,
 })

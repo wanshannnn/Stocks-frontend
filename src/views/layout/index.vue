@@ -16,17 +16,12 @@ const form = reactive({
 })
 const menuList = [
   {
-    title: '首页',
-    path: '/home',
-    icon: 'HomeFilled',
-  },
-  {
-    title: '最新股价',
+    title: '最新资讯',
     path: '/latest',
-    icon: 'Opportunity',
+    icon: 'Document',
   },
   {
-    title: '股价走势',
+    title: '趋势分析',
     path: '/trend',
     icon: 'TrendCharts',
   },
@@ -119,13 +114,11 @@ const quitFn = () => {
     }
   )
   .then(() => {
+    userInfoStore.$reset(); // 清除用户信息和状态
     ElMessage({
       type: 'success',
       message: '退出成功',
     })
-    // 清除用户信息，包括token
-    userInfoStore.userInfo = null;
-    console.log(userInfoStore);
     router.push('/login');
   })
   .catch(() => {

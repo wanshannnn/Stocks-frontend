@@ -4,8 +4,6 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import piniaPersist from 'pinia-plugin-persistedstate';
-import Mock from 'mockjs';
-
 import '@/utils/mock';
 import App from '@/App.vue';
 import router from '@/router';

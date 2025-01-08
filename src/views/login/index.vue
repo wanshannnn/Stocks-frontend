@@ -10,11 +10,8 @@ let loginForm = ref({
   username: "",
   password: "",
 });
-
-const loginRef = ref(); // 引用 el-form 组件实例
-
+const loginRef = ref();
 const userInfoStore = useUserInfoStore();
-
 const rules = {
   username: [
     { required: true, message: "请输入用户名", trigger: "blur" },
@@ -27,6 +24,7 @@ const rules = {
 }
 
 const login = async () => {
+  console.log('loginRef:', loginRef.value);
   // 先校验输入内容格式正确
   const valid = await loginRef.value.validate();
   // 通过校验，开始加载
@@ -34,16 +32,18 @@ const login = async () => {
     const { data: res } = await loginAPI(loginForm.value);
     console.log(res);
     // 登录失败
-    if ( res.code != 0 ) {
+    if ( res.code !== 0 ) {
+      ElMessage.error(res.message || '登录失败');
       return false;
     }
-    // 登陆成功
+    // 登录成功
     ElMessage.success('登陆成功');
-    // 把后端返回的当前登录用户信息存储到 Pinia 里
-    userInfoStore.userInfo = res.data;
+    userInfoStore.setUserInfo(res.data);
+    userInfoStore.setRoles(res.data.roles);
+    userInfoStore.setAuthenticated(true);
     console.log(userInfoStore.userInfo);
-    // 跳转
-    router.push('/home');
+    // 跳转到首页
+    router.push('/');
   } else {
     return false;
   }
@@ -57,7 +57,7 @@ const login = async () => {
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
         <!-- 登陆表单 -->
-        <el-form class="login_form" :model="loginForm" :rule="rules" :ref="loginRef">
+        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginRef">
           <h1>Stocks 身份认证</h1>
           <el-form-item prop="username">
             <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>

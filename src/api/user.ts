@@ -94,19 +94,6 @@ export const updateUserAPI = (params: any) => {
 }
 
 /**
- * 修改用户状态
- * @param params 用户id
- * @returns
- */
-export const updateUserStatusAPI = (id: number) => {
-    console.log('用户id', id)
-    return request({
-        url: `/user/status/${id}`,
-        method: 'put'
-    })
-}
-
-/**
  * 管理员根据id删除用户
  * @param id 用户id
  * @returns

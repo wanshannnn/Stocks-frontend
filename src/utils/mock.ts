@@ -1,5 +1,33 @@
 import Mock from 'mockjs';
 
+// 模拟登录接口
+Mock.mock('/api/user/login', 'post', (options) => {
+    const { username, password } = JSON.parse(options.body);
+    if (username === 'admin' && password === '123456') {
+        return {
+            code: 0,
+            message: '登录成功',
+            data: {
+                token: 'mock-token-123456',
+                roles: ['admin'],
+            },
+        };
+    } else if (username === 'user' && password === '123456') {
+        return {
+            code: 0,
+            message: '登录成功',
+            data: {
+                token: 'mock-token-654321',
+                roles: ['user'],
+            },
+        };
+    }
+    return {
+        code: 1,
+        message: '用户名或密码错误',
+        data: null,
+    };
+});
 
 // 自定义函数格式化为六位数的股票代码
 function generateStockCode(id: number): string {

@@ -1,6 +1,5 @@
 // 常量路由，所有用户都可以访问的路径
 export const constantRoute = [
-    // 登录
     {
         path: '/login',
         component: () => import('@/views/login/index.vue'),
@@ -8,10 +7,9 @@ export const constantRoute = [
         meta: {
             title: '登录', //菜单标题
             hidden: true, //代表路由标题在菜单中是否隐藏  true:隐藏 false:不隐藏
-            icon: 'Promotion', //菜单文字左侧的图标,支持element-plus全部图标
+            icon: 'Promotion',
         },
     },
-    // 注册
     {
         path: '/register',
         component: () => import('@/views/register/index.vue'),
@@ -22,7 +20,6 @@ export const constantRoute = [
             icon: 'Promotion',
         },
     },
-    // 登录成功以后展示数据的路径
     {
         path: '/',
         component: () => import('@/views/layout/index.vue'),
@@ -32,51 +29,20 @@ export const constantRoute = [
             hidden: false,
             icon: '',
         },
-        redirect: '/home',
-        children: [{
-            path: '/home',
-            component: () => import('@/views/layout/home/index.vue'),
-            name: 'home',
-        },{
-            path: '/trend',
-            component: () => import('@/views/layout/screen/trend/index.vue'),
-            name: 'trend',
-        },
-        {
-            path: '/latest',
-            component: () => import('@/views/layout/screen/latest/index.vue'),
-            name: 'latest',
-        },
-        // 管理者：管理用户权限
-        {
-            path: '/user',
-            component: () => import('@/views/layout/user/index.vue'),
-            name: 'user',
-            meta: {
-                title: '用户管理',
-                icon: 'User',
+        redirect: '/latest',
+        children: [
+            {
+                path: '/trend',
+                component: () => import('@/views/layout/screen/trend/index.vue'),
+                name: 'trend',
+                meta: { title: '趋势分析', icon: 'TrendCharts' },
             },
-        },
-        // 用户：管理自选股票
-        {
-            path: '/stock/collection',
-            component: () => import('@/views/layout/stock/collection/index.vue'),
-            name: 'collection',
-            meta: {
-                title: '自选股票',
-                icon: 'CollectionTag',
+            {
+                path: '/latest',
+                component: () => import('@/views/layout/screen/latest/index.vue'),
+                name: 'latest',
+                meta: { title: '最新资讯', icon: 'Document' },
             },
-        },
-        // 用户：管理持有股票
-        {
-            path: '/stock/possession',
-            component: () => import('@/views/layout/stock/possession/index.vue'),
-            name: 'possession',
-            meta: {
-                title: '持有股票',
-                icon: 'Suitcase',
-            },
-        },
         ]
     },
     // 404
@@ -92,39 +58,27 @@ export const constantRoute = [
     },
 ]
 
-// // 异步路由，拥有特定权限的用户可以访问的页面（等到实现页面之后再考虑权限分配）
-// export const asnycRoute = [
-//     // 管理者：管理用户权限
-//     {
-//         path: '/user',
-//         component: () => import('@/views/layout/user/index.vue'),
-//         name: 'user',
-//         meta: {
-//             title: '用户管理',
-//             icon: 'User',
-//         },
-//     },
-//     // 用户：管理自选股票
-//     {
-//         path: '/stock/collection',
-//         component: () => import('@/views/layout/stock/collection/index.vue'),
-//         name: 'collection',
-//         meta: {
-//             title: '自选股票',
-//             icon: 'CollectionTag',
-//         },
-//     },
-//     // 用户：管理持有股票
-//     {
-//         path: '/stock/possession',
-//         component: () => import('@/views/layout/stock/possession/index.vue'),
-//         name: 'possession',
-//         meta: {
-//             title: '持有股票',
-//             icon: 'Suitcase',
-//         },
-//     },
-// ]
+// 异步路由（需要根据权限动态加载的路由）
+export const asyncRoute = [
+    {
+        path: '/user',
+        component: () => import('@/views/layout/user/index.vue'),
+        name: 'user',
+        meta: { title: '用户管理', icon: 'User', roles: ['admin'] }, // 仅管理员可访问
+    },
+    {
+        path: '/stock/collection',
+        component: () => import('@/views/layout/stock/collection/index.vue'),
+        name: 'collection',
+        meta: { title: '自选股票', icon: 'CollectionTag', roles: ['user'] }, // 仅用户可访问
+    },
+    {
+        path: '/stock/possession',
+        component: () => import('@/views/layout/stock/possession/index.vue'),
+        name: 'possession',
+        meta: { title: '持有股票', icon: 'Suitcase', roles: ['user'] }, // 仅用户可访问
+    },
+];
 
 // 任意路由，用于将任何未匹配到的路径重定向到404页面
 export const anyRoute = {

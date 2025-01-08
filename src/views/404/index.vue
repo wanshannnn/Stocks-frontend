@@ -4,7 +4,7 @@
 <template>
   <div class="empty_container">
     <el-empty description="404 Not Found" />
-    <el-button type="info" @click="$router.push('/home')">返回首页</el-button>
+    <el-button type="info" @click="$router.push('/')">返回首页</el-button>
   </div>
 </template>
 
