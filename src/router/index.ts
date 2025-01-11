@@ -36,7 +36,8 @@ router.beforeEach(async (to, from, next) => {
   // 检查目标路径是否有权限
   const targetRoute = router.getRoutes().find((route) => route.path === to.path);
   if (targetRoute?.meta?.roles) {
-    const hasPermission = roles.some((role) => targetRoute.meta.roles.includes(role));
+    const routeRoles = targetRoute.meta.roles as string[];
+    const hasPermission = roles.some((role) => routeRoles.includes(role));
     if (!hasPermission) {
       return next('/404'); // 无权限跳转到404
     }
@@ -46,21 +47,21 @@ router.beforeEach(async (to, from, next) => {
 });
 
 // 根据用户角色过滤路由
-function filterAsyncRoutes(routes, roles) {
-  return routes.filter((route) => {
+function filterAsyncRoutes(routes: any, roles: any) {
+  return routes.filter((route: any) => {
     const routeRoles = route.meta?.roles;
     // 如果路由没有角色限制，所有用户都可访问
     if (!routeRoles) {
       return true;
     }
     // 如果有角色限制，严格匹配用户角色
-    return roles.some((role) => routeRoles.includes(role));
+    return roles.some((role: any) => routeRoles.includes(role));
   });
 }
 
-function addDynamicRoutes(roles) {
+function addDynamicRoutes(roles: any) {
   const accessibleRoutes = filterAsyncRoutes(asyncRoute, roles);
-  accessibleRoutes.forEach((route) => router.addRoute(route));
+  accessibleRoutes.forEach((route: any) => router.addRoute(route));
   router.addRoute(anyRoute); // 添加通配路由（404）
 }
 

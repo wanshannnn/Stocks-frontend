@@ -1,5 +1,6 @@
 import Mock from 'mockjs';
 
+// user
 // 模拟登录接口
 Mock.mock('/api/user/login', 'post', (options) => {
     const { username, password } = JSON.parse(options.body);
@@ -59,14 +60,68 @@ Mock.mock('/api/user/fixpwd', 'put', (options) => {
     };
 });
 
+// 模拟分页展示用户数据
+const userPageListMockAPI = Mock.mock({
+    'items|200': [
+        {
+            'id|+1': 1,
+            username: '@cname',
+            account: '@integer(0, 1000)',
+            status: '@boolean',
+            createTime: '@date("yyyy-MM-dd")',
+        }
+    ]
+});
+Mock.mock(/\/user\/page/, 'get', (options: any) => {
+    const urlParams = new URLSearchParams(options.url.split('?')[1]);
+    const page = parseInt(urlParams.get('page') || '1');
+    const size = parseInt(urlParams.get('size') || '20');
+    const startIndex = (page - 1) * size;
+    const endIndex = startIndex + size;
+    const items = userPageListMockAPI.items.slice(startIndex, endIndex);
+    return {
+        code: 0,
+        data: {
+            items,
+            total: userPageListMockAPI.items.length,
+        },
+    };
+});
 
+// 模拟添加用户信息
+Mock.mock(/\/user\/add/, 'post', (options: any) => {
+    return {
+        code: 0,
+        message: '添加成功',
+    };
+});
+
+// 模拟更新用户信息
+Mock.mock(/\/user\/update/, 'put', (options: any) => {
+    return {
+        code: 0,
+        message: '更新成功',
+    };
+});
+
+// 模拟删除用户信息
+Mock.mock(/\/user\/delete\/\d+/, 'delete', (options: any) => {
+    const id = options.url.match(/\/user\/delete\/(\d+)/)?.[1];
+    return {
+        code: 0,
+        message: `用户删除成功 (ID: ${id})`,
+    };
+});
+
+
+
+// stock
 // 自定义函数格式化为六位数的股票代码
 function generateStockCode(id: number): string {
     return id.toString().padStart(6, '0');
 }
 
-
-// 模拟根据股票 id 获取股票数据
+// 模拟根据股票 id 获取最新股票数据
 Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
     const id = options.url.match(/\/stocks\/id\/(\d+)\/latest/)[1];
     return {
@@ -87,8 +142,7 @@ Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
     };
 });
 
-
-// 模拟根据股票 name 获取股票数据
+// 模拟根据股票 name 获取最新股票数据
 Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
     const name = decodeURIComponent(options.url.match(/\/stocks\/name\/([^/]+)\/latest/)[1]);
     return {
@@ -109,8 +163,7 @@ Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
     };
 });
 
-
-// 模拟分页获取最新股票数据
+// 模拟分页获取最新的所有股票数据
 const getLatestStockDataByPageMockAPI = Mock.mock({
     'items|200': [
         {
@@ -146,7 +199,6 @@ Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
     };
 });
 
-
 // 模拟用户自选股票数据
 Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
     const userId = options.url.match(/\/stocks\/userId\/(\d+)\/collection/)[1];
@@ -169,7 +221,6 @@ Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
         data: stockList,
     };
 });
-
 
 // 模拟用户持有股票数据
 Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
@@ -194,59 +245,67 @@ Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
     };
 });
 
-
-// 模拟分页展示用户数据
-const userPageListMockAPI = Mock.mock({
+// 模拟股票 id 获取全部股票数据
+const getStockDataByIdMockAPI = Mock.mock({
     'items|200': [
         {
-            'id|+1': 1,
-            username: '@cname',
-            account: '@integer(0, 1000)',
-            status: '@boolean',
-            createTime: '@date("yyyy-MM-dd")',
+            'name': '@ctitle(3, 5)',
+            'price': '@float(10, 1000, 0, 2)',
+            'volume': '@integer(1000, 10000)',
+            'exchange': '@integer(1000, 10000)',
+            'turnover': '@integer(1000, 10000)',
+            'amplitude': '@integer(1000, 10000)',
+            'highest': '@integer(1000, 10000)',
+            'lowest': '@integer(1000, 10000)',
+            'date': '@date("yyyy-MM-dd")',
         }
     ]
 });
-Mock.mock(/\/user\/page/, 'get', (options: any) => {
-    const urlParams = new URLSearchParams(options.url.split('?')[1]);
-    const page = parseInt(urlParams.get('page') || '1');
-    const size = parseInt(urlParams.get('size') || '20');
-    const startIndex = (page - 1) * size;
-    const endIndex = startIndex + size;
-    const items = userPageListMockAPI.items.slice(startIndex, endIndex);
+Mock.mock(/\/stocks\/id\/\d+/, 'get', (options: any) => {
+    const id = options.url.match(/\/stocks\/id\/(\d+)/)[1];
+    const items = getStockDataByIdMockAPI.items;
     return {
         code: 0,
         data: {
+            id,
+            code: generateStockCode(id),
             items,
-            total: userPageListMockAPI.items.length,
-        },
+        }
     };
 });
 
-
-// 模拟添加用户信息
-Mock.mock(/\/user\/add/, 'post', (options: any) => {
+// 模拟删除股票数据
+Mock.mock(/\/stocks\/id\/\d+\/delete/, 'delete', (options: any) => {
+    const id = options.url.match(/\/stocks\/id\/(\d+)\/delete/)[1];
     return {
         code: 0,
-        message: '添加成功',
+        message: `股票 ID 为 ${id} 的数据已删除。`
     };
 });
 
-
-// 模拟更新用户信息
-Mock.mock(/\/user\/update/, 'put', (options: any) => {
+// 模拟添加股票数据
+Mock.mock(/\/stocks\/add/, 'post', (options: any) => {
+    const stockData = JSON.parse(options.body);
     return {
         code: 0,
-        message: '更新成功',
+        message: '股票数据添加成功！',
+        data: {
+            id: generateStockCode(Mock.mock('@integer(1, 100000)')),
+            ...stockData
+        }
     };
 });
 
-
-// 模拟删除用户信息
-Mock.mock(/\/user\/delete\/\d+/, 'delete', (options: any) => {
-    const id = options.url.match(/\/user\/delete\/(\d+)/)?.[1];
+// 模拟更新股票数据
+Mock.mock(/\/stocks\/id\/\d+\/update/, 'put', (options: any) => {
+    const id = options.url.match(/\/stocks\/id\/(\d+)\/update/)[1];
+    const stockData = JSON.parse(options.body);
     return {
         code: 0,
-        message: `用户删除成功 (ID: ${id})`,
+        message: `股票 ID 为 ${id} 的数据已更新。`,
+        data: {
+            id,
+            ...stockData
+        }
     };
 });

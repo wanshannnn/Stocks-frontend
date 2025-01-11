@@ -4,7 +4,7 @@ import { getCollectionStockDataByUserIdAPI } from '@/api/stock';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock';
 
-const userId = '12345'; // 假设这是当前用户的ID
+const userId = '123456'; // 假设这是当前用户的ID
 const loading = ref(true);
 const collectionStocks = ref<StockInfo[] | null>(null);
 
@@ -12,7 +12,8 @@ const fetchCollectionStocks = async (userId: string) => {
   try {
     const res = await getCollectionStockDataByUserIdAPI(userId);
     if (res.data.code === 0) {
-      collectionStocks.value = res.data.data;
+      const data = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+      collectionStocks.value = data;
     } else {
       ElMessage.error('获取自选股票失败');
     }

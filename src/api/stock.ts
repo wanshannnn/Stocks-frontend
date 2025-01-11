@@ -23,7 +23,7 @@ export const getLatestStockDataByPageAPI = (params: any) => {
     });
 };
 
-// 根据用户 id 查找自选股票
+// 根据 userId 查找自选股票
 export const getCollectionStockDataByUserIdAPI = (userId: string) => {
     return request<{ code: number; data: StockInfo }>({
         url: `/stocks/userId/${userId}/collection`,
@@ -31,7 +31,7 @@ export const getCollectionStockDataByUserIdAPI = (userId: string) => {
     });
 };
 
-// 根据用户 id 查找持有股票
+// 根据 userId 查找持有股票
 export const getPossessionStockDataByUserIdAPI = (userId: string) => {
     return request<{ code: number; data: StockInfo }>({
         url: `/stocks/userId/${userId}/possession`,
@@ -40,30 +40,19 @@ export const getPossessionStockDataByUserIdAPI = (userId: string) => {
 };
 
 
-// 根据 ID 和时间范围获取股票数据
-export const getStockDataByIdAndTimeRangeAPI = (id: string, startTime: string, endTime: string) => {
+// 根据 id 获取全部股票数据
+export const getStockDataByIdAPI = (id: string) => {
     return request({
-        url: `/stocks/id/${id}/query`,
+        url: `/stocks/id/${id}`,
         method: 'get',
-        params: { startTime, endTime },  // 使用 params 传递查询参数
     });
 }
 
-// 根据 ID、时间范围和分页信息获取股票数据
-export const getStockDataByIdAndTimeRangeByPageAPI = (id: string, startTime: string, endTime: string, page: number, size: number) => {
-    return request({
-        url: `/stocks/id/${id}/query/page`,
-        method: 'get',
-        params: { startTime, endTime, page, size },  // 使用 params 传递查询参数
-    });
-}
-
-// 删除股票数据（按时间范围）
-export const deleteStockDataByIdAndTimeRangeAPI = (id: string, startTime: string, endTime: string) => {
+// 删除股票数据
+export const deleteStockDataByIdAPI = (id: string) => {
     return request({
         url: `/stocks/id/${id}/delete`,
         method: 'delete',
-        params: { startTime, endTime },
     });
 }
 
@@ -76,7 +65,7 @@ export const addStockDataAPI = (stockData: any) => {
     });
 }
 
-// 更新股票数据（根据 ID）
+// 更新股票数据
 export const updateStockDataByIdAPI = (id: string, stockData: any) => {
     return request({
         url: `/stocks/id/${id}/update`,
