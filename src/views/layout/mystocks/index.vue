@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getCollectionStockDataByUserIdAPI } from '@/api/stock';
+import { getCollectionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
-import type { StockInfo } from '@/types/stock';
+import type { StockInfo } from '@/types/stock.ts';
 
 const userId = '123456'; // 假设这是当前用户的ID
 const loading = ref(true);

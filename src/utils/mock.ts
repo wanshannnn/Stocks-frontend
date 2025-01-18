@@ -4,30 +4,27 @@ import Mock from 'mockjs';
 // 模拟登录接口
 Mock.mock('/api/user/login', 'post', (options) => {
     const { username, password } = JSON.parse(options.body);
-    if (username === 'admin' && password === '123456') {
+    if (username === 'Alice' && password === '123456') {
         return {
             code: 0,
             message: '登录成功',
             data: {
-                token: 'mock-token-123456',
-                roles: ['admin'],
+                id: '12345',
+                username: 'Alice',
+                account: 'alice_account',
+                roles: [['admin'],['user']],
+                token: 'abcdef123456',
+                status: true,
+                createTime: '2025-01-01T12:00:00Z',
             },
         };
-    } else if (username === 'user' && password === '123456') {
+    } else {
         return {
-            code: 0,
-            message: '登录成功',
-            data: {
-                token: 'mock-token-654321',
-                roles: ['user'],
-            },
+            code: 1,
+            message: '用户名或密码错误',
+            data: null,
         };
     }
-    return {
-        code: 1,
-        message: '用户名或密码错误',
-        data: null,
-    };
 });
 
 // 模拟注册接口
@@ -115,7 +112,7 @@ Mock.mock(/\/user\/delete\/\d+/, 'delete', (options: any) => {
 
 
 
-// stock
+// mystocks
 // 自定义函数格式化为六位数的股票代码
 function generateStockCode(id: number): string {
     return id.toString().padStart(6, '0');
@@ -186,7 +183,7 @@ const getLatestStockDataByPageMockAPI = Mock.mock({
 Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
     const urlParams = new URLSearchParams(options.url.split('?')[1]);
     const page = parseInt(urlParams.get('page') || '1');
-    const size = parseInt(urlParams.get('size') || '20');
+    const size = parseInt(urlParams.get('size') || '10');
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
     const items = getLatestStockDataByPageMockAPI.items.slice(startIndex, endIndex);

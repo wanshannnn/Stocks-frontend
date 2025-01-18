@@ -1,0 +1,74 @@
+:root {
+    /* 基础色 */
+    --color-primary: #6A1B9A; /* 主紫色 */
+    --color-primary-light: #9C4DCC; /* 浅紫色 */
+    --color-primary-dark: #4A148C; /* 深紫色 */
+
+    /* 辅助色 */
+    --color-secondary: #AB47BC; /* 次要紫色 */
+    --color-secondary-light: #D05CE3; /* 浅次要紫色 */
+    --color-secondary-dark: #8E24AA; /* 深次要紫色 */
+
+    /* 中性色 */
+    --color-gray-light: #F5F5F5; /* 浅灰色 */
+    --color-gray: #BDBDBD; /* 中灰色 */
+    --color-gray-dark: #616161; /* 深灰色 */
+
+    /* 状态色 */
+    --color-success: #4CAF50; /* 成功状态绿色 */
+    --color-warning: #FFC107; /* 警告状态黄色 */
+    --color-error: #F44336; /* 错误状态红色 */
+
+    /* 背景色 */
+    --color-background: #F3E5F5; /* 背景淡紫色 */
+    --color-surface: #FFFFFF; /* 表面背景白色 */
+
+    /* 边框色 */
+    --color-border: #E1BEE7; /* 边框浅紫色 */
+
+    /* 文字颜色 */
+    --color-text-primary: #212121; /* 主要文字黑色 */
+    --color-text-secondary: #6A1B9A; /* 次要文字紫色 */
+    --color-text-light: #FFFFFF; /* 浅色文字白色 */
+
+    /* 悬停色 */
+    --color-hover: #8E24AA; /* 悬停状态深紫色 */
+    --color-hover-light: #D1C4E9; /* 浅紫色悬停背景 */
+}
+
+/* 主按钮样式 */
+.el-button--primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-border) !important;
+    color: var(--color-text-light) !important;
+}
+
+.el-button--primary:hover {
+    background-color: var(--color-hover) !important;
+    border-color: var(--color-border) !important;
+    color: var(--color-text-light) !important;
+}
+
+/* 覆盖 Dropdown 下拉菜单项的默认样式 */
+.el-dropdown-menu__item {
+    background-color: #FFFFFF; /* 默认背景色 */
+    color: #333333; /* 默认文字颜色 */
+}
+
+/* 鼠标悬停时的背景色和文字颜色 */
+.el-dropdown-menu__item:hover {
+    background-color: #9B59B6 !important; /* 紫色背景 */
+    color: #FFFFFF !important; /* 白色文字 */
+}
+
+body {
+    background-color: var(--color-background) !important;
+    color: var(--color-text-primary) !important;
+}
+
+.card {
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    color: var(--color-text-primary) !important;
+}

@@ -16,28 +16,23 @@ const form = reactive({
 })
 const menuList = [
   {
-    title: '最新资讯',
-    path: '/latest',
+    title: ' Dashboard',
+    path: '/dashboard',
+    icon: 'House',
+  },
+  {
+    title: 'MyStocks',
+    path: '/mystocks',
     icon: 'Document',
   },
   {
-    title: '趋势分析',
-    path: '/trend',
-    icon: 'TrendCharts',
+    title: 'Management',
+    path: '/management',
+    icon: 'Management',
   },
   {
-    title: '自选股票',
-    path: '/stock/collection',
-    icon: 'CollectionTag',
-  },
-  {
-    title: '持有股票',
-    path: '/stock/possession',
-    icon: 'Suitcase',
-  },
-  {
-    title: '用户管理',
-    path: '/user',
+    title: 'Profile',
+    path: '/profile',
     icon: 'User',
   },
 ]
@@ -131,7 +126,7 @@ const quitFn = () => {
 </script>
 
 <template>
-  <div class="home_container">
+  <div class="home-container">
     <el-container>
       <!-- 侧边栏 -->
       <!-- isCollapse 用于判断侧边栏是否展开 -->
@@ -150,7 +145,7 @@ const quitFn = () => {
         </template>
       </el-menu>
 
-      <el-container class="header_container">
+      <el-container class="header-container">
         <!-- 顶部栏 -->
         <el-header>
           <!-- 控制侧边栏是否展开 -->
@@ -168,18 +163,22 @@ const quitFn = () => {
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item @click="dialogFormVisible = true">修改密码</el-dropdown-item>
-                <el-dropdown-item @click="quitFn">退出登录</el-dropdown-item>
+                <el-dropdown-item @click="quitFn">退出登陆</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
           <!-- Github -->
-          <el-link href="https://github.com/wanshannnn" style="float: right">
-            Github
-          </el-link>
+          <a href="https://github.com/wanshannnn" style="float: right">
+            <img
+                src="@/assets/icons/github.svg"
+                alt="Github"
+                style="width: 36px; height: 36px; transform: translate(0px, 12px);"
+            />
+          </a>
         </el-header>
 
         <!-- 主体部分 -->
-        <el-main class="main_container">
+        <el-main class="main-container">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -210,14 +209,14 @@ const quitFn = () => {
 </template>
 
 <style lang="scss" scoped>
-.home_container {
+.home-container {
   height: 100vh;
-  background-color: #F7F7F7;
+  background-color: var(--color-surface);
   display: flex;
 }
 
 .el-header {
-  background-color: #F7F7F7;
+  background-color: var(--color-surface);
   color: #333333;
   line-height: 60px;
 
@@ -225,42 +224,38 @@ const quitFn = () => {
     float: right;
     width: 80px;
     margin: 14px 20px;
-    background-color: #E0E0E0;
+    background-color: #F7F7F7;
     border-color: #D1D1D1;
     color: #333333;
-
-    &:hover {
-      background-color: #BDBDBD;
-    }
 
   }
 }
 
 .el-menu {
-  padding: 30px 0 0 0;
-  background-color: #E0E0E0;
-  text-color: #333333;
+  padding: 60px 0 0 0;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-right: 1px solid var(--color-border);
 }
 
 .el-menu-item {
-  margin: 10px;
   padding-right: 30px;
-  font-size: 15px;
+  font-size: 12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
+  height: 48px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #BDBDBD;
+    background-color: var(--color-hover-light);
+    color: var(--color-primary);
   }
 }
 
-.el-menu-item .el-icon {
-  margin-left: -8px; /* 使图标略微向左移动 */
-}
-
 .el-menu-item.is-active {
-  background-color: #333333;
-  color: #E0E0E0;
+  background-color: var(--color-hover);
+  color: var(--color-text-light);
   font-weight: bold;
+  border-left: 4px solid var(--color-primary);
 }
 </style>

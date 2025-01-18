@@ -1,13 +1,13 @@
-// 常量路由，所有用户都可以访问的路径
 export const constantRoute = [
     {
         path: '/login',
         component: () => import('@/views/login/index.vue'),
         name: 'login',
         meta: {
-            title: '登录', //菜单标题
-            hidden: true, //代表路由标题在菜单中是否隐藏  true:隐藏 false:不隐藏
-            icon: 'Promotion',
+            title: '登录',
+            hidden: true,
+            icon: '',
+            requiresAuth: false
         },
     },
     {
@@ -17,7 +17,19 @@ export const constantRoute = [
         meta: {
             title: '注册',
             hidden: true,
-            icon: 'Promotion',
+            icon: '',
+            requiresAuth: false
+        },
+    },
+    {
+        path: '/404',
+        component: () => import('@/views/404/index.vue'),
+        name: '404',
+        meta: {
+            title: '404',
+            hidden: true,
+            icon: '',
+            requiresAuth: false
         },
     },
     {
@@ -28,57 +40,55 @@ export const constantRoute = [
             title: '',
             hidden: false,
             icon: '',
+            requiresAuth: false
         },
-        redirect: '/latest',
+        redirect: '/dashboard',
         children: [
             {
-                path: '/trend',
-                component: () => import('@/views/layout/screen/trend/index.vue'),
-                name: 'trend',
-                meta: { title: '趋势分析', icon: 'TrendCharts' },
+                path: '/dashboard',
+                component: () => import('@/views/layout/dashboard/index.vue'),
+                name: 'dashboard',
+                meta: {
+                    title: 'Dashboard',
+                    icon: 'House',
+                    requiresAuth: false
+                },
             },
             {
-                path: '/latest',
-                component: () => import('@/views/layout/screen/latest/index.vue'),
-                name: 'latest',
-                meta: { title: '最新资讯', icon: 'Document' },
+                path: '/mystocks',
+                component: () => import('@/views/layout/mystocks/index.vue'),
+                name: 'mystocks',
+                meta: {
+                    title: 'MyStocks',
+                    icon: 'Document',
+                    // requiresAuth: true,
+                    // roles: ['user']
+                },
+            },
+            {
+                path: '/management',
+                component: () => import('@/views/layout/management/index.vue'),
+                name: 'management',
+                meta: {
+                    title: 'Management',
+                    icon: 'Management',
+                    // requiresAuth: true,
+                    // roles: ['admin']
+                },
+            },
+            {
+                path: '/profile',
+                component: () => import('@/views/layout/profile/index.vue'),
+                name: 'profile',
+                meta: {
+                    title: 'Profile',
+                    icon: 'User',
+                    requiresAuth: false
+                },
             },
         ]
     },
-    // 404
-    {
-        path: '/404',
-        component: () => import('@/views/404/index.vue'),
-        name: '404',
-        meta: {
-            title: '404',
-            hidden: true,
-            icon: 'DocumentDelete',
-        },
-    },
 ]
-
-// 异步路由（需要根据权限动态加载的路由）
-export const asyncRoute = [
-    {
-        path: '/user',
-        component: () => import('@/views/layout/user/index.vue'),
-        name: 'user',
-        meta: { title: '用户管理', icon: 'User', roles: ['admin'] }, // 仅管理员可访问
-    },
-    {
-        path: '/stock/collection',
-        component: () => import('@/views/layout/stock/collection/index.vue'),
-        name: 'collection',
-        meta: { title: '自选股票', icon: 'CollectionTag', roles: ['user'] }, // 仅用户可访问
-    },
-    {
-        path: '/stock/possession',
-        component: () => import('@/views/layout/stock/possession/index.vue'),
-        name: 'possession',
-        meta: { title: '持有股票', icon: 'Suitcase', roles: ['user'] }, // 仅用户可访问
-    },
-];
 
 // 任意路由，用于将任何未匹配到的路径重定向到404页面
 export const anyRoute = {
@@ -88,6 +98,7 @@ export const anyRoute = {
     meta: {
         title: '任意路由',
         hidden: true,
-        icon: 'DataLine',
+        icon: '',
+        requiresAuth: false
     },
 }

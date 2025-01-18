@@ -49,7 +49,7 @@ const renderChart = (items: { date: string; price: number; volume: number; turno
   // 设置图表的配置项
   const option = {
     title: {
-      text: "股票信息趋势",
+      text: "",
     },
     tooltip: {
       trigger: "axis",
@@ -62,11 +62,6 @@ const renderChart = (items: { date: string; price: number; volume: number; turno
       right: "4%",
       bottom: "3%",
       containLabel: true,
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
     },
     xAxis: {
       type: "category",
@@ -125,17 +120,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <el-input
-        v-model="input"
-        style="width: 240px"
-        placeholder="请输入股票代码"
-        clearable
-    />
-    <div ref="chartContainer" style="height: 400px; margin-top: 20px;"></div>
-  </div>
+  <el-row>
+    <el-col :span="8">
+      <h3>History</h3>
+    </el-col>
+    <el-col :span="16">
+      <el-input
+          v-model="input"
+          placeholder="Please fill in the stock code"
+          clearable
+      />
+    </el-col>
+  </el-row>
+  <div class="chart-container" ref="chartContainer" style="height: 400px; margin-top: 20px;" />
 </template>
 
 <style scoped>
-/* 样式可以根据需要调整 */
+h3 {
+  margin: 5px;
+  font-family: 'Georgia', serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.chart-container {
+  padding: 20px;
+}
 </style>

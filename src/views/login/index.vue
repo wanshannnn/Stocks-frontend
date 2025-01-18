@@ -39,11 +39,10 @@ const login = async () => {
     // 登录成功
     ElMessage.success('登陆成功');
     userInfoStore.setUserInfo(res.data);
-    userInfoStore.setRoles(res.data.roles);
     userInfoStore.setAuthenticated(true);
     console.log(userInfoStore.userInfo);
     // 跳转到首页
-    router.push('/');
+    router.push('/dashboard');
   } else {
     return false;
   }
