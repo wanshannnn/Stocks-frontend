@@ -122,7 +122,7 @@ onMounted(() => {
 <template>
   <el-row>
     <el-col :span="8">
-      <h3>History</h3>
+      <p>History</p>
     </el-col>
     <el-col :span="16">
       <el-input
@@ -136,7 +136,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-h3 {
+p {
   margin: 5px;
   font-family: 'Georgia', serif;
   font-size: 20px;

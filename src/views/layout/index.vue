@@ -204,7 +204,6 @@ const quitFn = () => {
         </div>
       </template>
     </el-dialog>
-
   </div>
 </template>
 

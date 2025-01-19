@@ -64,7 +64,7 @@ const handleSearch = () => {
 <template>
     <el-row class="search-container" align="middle">
       <el-col :span="8">
-        <h3>Latest</h3>
+        <p>Latest</p>
       </el-col>
       <el-col :span="4"></el-col>
       <el-col :span="12">
@@ -112,7 +112,7 @@ const handleSearch = () => {
   text-align: center;
 }
 
-h3 {
+p {
   margin: 5px;
   font-family: 'Georgia', serif;
   font-size: 20px;

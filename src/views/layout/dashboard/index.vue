@@ -4,12 +4,13 @@ import History from "@/components/history.vue";
 import Latest from "@/components/latest.vue";
 
 const userInfoStore = useUserInfoStore();
+const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date());
 </script>
 
 <template>
-  <h2>Welcome {{ userInfoStore.userInfo ? '，' + userInfoStore.userInfo.username : '' }}</h2>
-  <div class="main-container">
-
+  <p class="welcome">Welcome {{ userInfoStore.userInfo ? '，' + userInfoStore.userInfo.username : '' }}</p>
+  <p class="current-date">Today：{{ today }}</p>
+  <div class="container">
     <!-- 指数 -->
     <el-row>
       <el-col :span="6">
@@ -41,26 +42,34 @@ const userInfoStore = useUserInfoStore();
     <el-row>
       <!-- 趋势图-->
       <el-col :span="8">
-        <div class="history-graph">
-          <History />
+        <div class="history-graph-container">
+          <History/>
         </div>
       </el-col>
       <!-- 最新数据 -->
       <el-col :span="16">
         <div class="latest-stock-container">
-          <Latest />
+          <Latest/>
         </div>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
 <style scoped>
-h2 {
+.welcome {
   margin-left: 20px;
+  margin-bottom: -10px;
   font-family: 'Georgia', serif;
   font-size: 30px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.current-date {
+  margin-left: 25px;
+  font-family: 'Georgia', serif;
+  font-size: 15px;
   font-weight: bold;
   color: var(--color-text-primary);
 }
@@ -87,7 +96,7 @@ h4 {
   margin: 20px;
 }
 
-.history-graph {
+.history-graph-container {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   box-sizing: border-box;
@@ -102,5 +111,4 @@ h4 {
   padding: 20px;
   margin: 20px;
 }
-
 </style>
