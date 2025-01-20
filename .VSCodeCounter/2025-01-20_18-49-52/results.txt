@@ -1,0 +1,74 @@
+Date : 2025-01-20 18:49:52
+Directory : /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src
+Total : 27 files,  2131 codes, 170 comments, 222 blanks, all 2523 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| vue        |         13 |      1,405 |         24 |        138 |      1,567 |
+| TypeScript |         12 |        615 |        127 |         55 |        797 |
+| CSS        |          1 |        110 |         19 |         29 |        158 |
+| XML        |          1 |          1 |          0 |          0 |          1 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                             | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                |         27 |      2,131 |        170 |        222 |      2,523 |
+| . (Files)                                                                                        |          2 |         28 |          0 |          9 |         37 |
+| api                                                                                              |          3 |        123 |         49 |         18 |        190 |
+| assets                                                                                           |          2 |        111 |         19 |         29 |        159 |
+| assets (Files)                                                                                   |          1 |        110 |         19 |         29 |        158 |
+| assets/icons                                                                                     |          1 |          1 |          0 |          0 |          1 |
+| components                                                                                       |          4 |        395 |          3 |         40 |        438 |
+| router                                                                                           |          2 |        112 |         57 |          5 |        174 |
+| stores                                                                                           |          1 |         21 |          0 |          1 |         22 |
+| types                                                                                            |          3 |         30 |          0 |          0 |         30 |
+| utils                                                                                            |          2 |        309 |         21 |         25 |        355 |
+| views                                                                                            |          8 |      1,002 |         21 |         95 |      1,118 |
+| views/404                                                                                        |          1 |         18 |          0 |          3 |         21 |
+| views/layout                                                                                     |          5 |        599 |         18 |         55 |        672 |
+| views/layout (Files)                                                                             |          1 |        232 |         10 |         18 |        260 |
+| views/layout/dashboard                                                                           |          1 |        101 |          3 |         11 |        115 |
+| views/layout/management                                                                          |          1 |        235 |          5 |         19 |        259 |
+| views/layout/mystocks                                                                            |          1 |         25 |          0 |          2 |         27 |
+| views/layout/profile                                                                             |          1 |          6 |          0 |          5 |         11 |
+| views/login                                                                                      |          1 |        157 |          2 |         17 |        176 |
+| views/register                                                                                   |          1 |        228 |          1 |         20 |        249 |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                         | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/App.vue                           | vue        |          8 |          0 |          3 |         11 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/api/analysis.ts                   | TypeScript |          7 |          1 |          1 |          9 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/api/stock.ts                      | TypeScript |         58 |          8 |          9 |         75 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/api/user.ts                       | TypeScript |         58 |         40 |          8 |        106 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/assets/base.css                   | CSS        |        110 |         19 |         29 |        158 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/assets/icons/github.svg           | XML        |          1 |          0 |          0 |          1 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/components/allStocks.vue          | vue        |         60 |          0 |          7 |         67 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/components/history.vue            | vue        |        137 |          0 |         13 |        150 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/components/holdStocks.vue         | vue        |         83 |          0 |         10 |         93 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/components/latest.vue             | vue        |        115 |          3 |         10 |        128 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/main.ts                           | TypeScript |         20 |          0 |          6 |         26 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/router/index.ts                   | TypeScript |         14 |         52 |          3 |         69 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/router/routes.ts                  | TypeScript |         98 |          5 |          2 |        105 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/stores/index.ts                   | TypeScript |         21 |          0 |          1 |         22 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/types/analysis.ts                 | TypeScript |          9 |          0 |          0 |          9 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/types/stock.ts                    | TypeScript |         12 |          0 |          0 |         12 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/types/user.ts                     | TypeScript |          9 |          0 |          0 |          9 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/utils/mock.ts                     | TypeScript |        270 |         19 |         19 |        308 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/utils/request.ts                  | TypeScript |         39 |          2 |          6 |         47 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/404/index.vue               | vue        |         18 |          0 |          3 |         21 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/layout/dashboard/index.vue  | vue        |        101 |          3 |         11 |        115 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/layout/index.vue            | vue        |        232 |         10 |         18 |        260 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/layout/management/index.vue | vue        |        235 |          5 |         19 |        259 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/layout/mystocks/index.vue   | vue        |         25 |          0 |          2 |         27 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/layout/profile/index.vue    | vue        |          6 |          0 |          5 |         11 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/login/index.vue             | vue        |        157 |          2 |         17 |        176 |
+| /Users/suicidekirkland/MyDesktop/MyProject/Stocks-frontend/src/views/register/index.vue          | vue        |        228 |          1 |         20 |        249 |
+| Total                                                                                            |            |      2,131 |        170 |        222 |      2,523 |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

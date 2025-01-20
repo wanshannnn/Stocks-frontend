@@ -4,7 +4,7 @@ import HoldStocks from "@/components/holdStocks.vue";
 </script>
 
 <template>
-  <div class="container">
+  <div class="mystocks-container">
     <el-row>
       <el-col :span="11" class="stock-container">
         <AllStocks/>

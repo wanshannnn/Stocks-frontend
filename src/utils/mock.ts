@@ -199,7 +199,7 @@ Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
 // 模拟用户自选股票数据
 Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
     const userId = options.url.match(/\/stocks\/userId\/(\d+)\/collection/)[1];
-    const stockList = Array.from({ length: 5 }).map((_, index) => ({
+    const stockList = Array.from({ length: 10 }).map((_, index) => ({
         userId: userId,
         stockId: index + 1,
         code: generateStockCode(index + 1),

@@ -34,16 +34,16 @@ onMounted(() => {
     <p>All</p>
     <el-card class="all-stocks-card" :loading="loading" shadow="never">
       <el-table :data="collectionStocks" style="width: 100%">
-        <el-table-column label="股票名称" prop="name"></el-table-column>
-        <el-table-column label="股票代码" prop="code"></el-table-column>
-        <el-table-column label="当前价格" prop="price"></el-table-column>
-        <el-table-column label="成交额" prop="volume"></el-table-column>
-        <el-table-column label="涨跌幅" prop="exchange"></el-table-column>
-        <el-table-column label="成交量" prop="turnover"></el-table-column>
-        <el-table-column label="振幅" prop="amplitude"></el-table-column>
-        <el-table-column label="最高" prop="highest"></el-table-column>
-        <el-table-column label="最低" prop="lowest"></el-table-column>
-        <el-table-column label="更新时间" prop="date"></el-table-column>
+        <el-table-column width="100" label="Name" prop="name"></el-table-column>
+        <el-table-column width="100" label="Code" prop="code"></el-table-column>
+        <el-table-column width="100" label="Price" prop="price"></el-table-column>
+        <el-table-column width="100" label="Volume" prop="volume"></el-table-column>
+        <el-table-column width="100" label="Exchange" prop="exchange"></el-table-column>
+        <el-table-column width="100" label="Turnover" prop="turnover"></el-table-column>
+        <el-table-column width="100" label="Amplitude" prop="amplitude"></el-table-column>
+        <el-table-column width="100" label="Highest" prop="highest"></el-table-column>
+        <el-table-column width="100" label="Lowest" prop="lowest"></el-table-column>
+        <el-table-column width="120" label="Date" prop="date"></el-table-column>
       </el-table>
     </el-card>
   </div>

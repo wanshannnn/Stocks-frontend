@@ -10,7 +10,7 @@ const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric',
 <template>
   <p class="welcome">Welcome {{ userInfoStore.userInfo ? '，' + userInfoStore.userInfo.username : '' }}</p>
   <p class="current-date">Today：{{ today }}</p>
-  <div class="container">
+  <div class="dashboard-container">
     <!-- 指数 -->
     <el-row>
       <el-col :span="6">

@@ -102,7 +102,6 @@ body {
     color: var(--color-hover) !important;
 }
 
-/* 选中状态的样式 */
 .el-pagination .el-pager li.is-active {
     color: var(--color-text-secondary) !important;
     font-weight: bold !important;
@@ -122,7 +121,7 @@ body {
     box-shadow: none !important;
 }
 
-/* 选择器样式 */
+/* 选择组件样式 */
 .el-select {
     text-color: var(--color-text-primary) !important;
 }
@@ -156,4 +155,8 @@ body {
     background-color: var(--color-hover-light) !important;
     color: var(--color-text-secondary) !important;
     font-weight: bold;
+}
+
+.el-card {
+    border-color: var(--color-border) !important;
 }
