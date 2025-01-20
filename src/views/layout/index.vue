@@ -199,7 +199,7 @@ const quitFn = () => {
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="cancelForm">取消</el-button>
+          <el-button @click="cancelForm" class="cancel-button">取消</el-button>
           <el-button type="primary" @click="fixPwd">确定</el-button>
         </div>
       </template>

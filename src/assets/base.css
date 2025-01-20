@@ -33,6 +33,7 @@
 
     /* 悬停色 */
     --color-hover: #8E24AA; /* 悬停状态深紫色 */
+    --color-hover-secondary: #9B59B6;  /* 悬停状态浅紫色 */
     --color-hover-light: #D1C4E9; /* 浅紫色悬停背景 */
 }
 
@@ -53,6 +54,13 @@ body {
     background-color: var(--color-hover) !important;
     border-color: var(--color-border) !important;
     color: var(--color-text-light) !important;
+}
+
+/* 取消按钮样式 */
+.cancel-button:hover {
+    color: var(--color-hover) !important;
+    border-color: var(--color-border) !important;
+    background-color: var(--color-background) !important;
 }
 
 /* Dropdown 下拉菜单样式 */
@@ -98,4 +106,54 @@ body {
 .el-pagination .el-pager li.is-active {
     color: var(--color-text-secondary) !important;
     font-weight: bold !important;
+}
+
+/* 表单样式 */
+.el-form__wrapper {
+    border: var(--color-background) !important;
+}
+
+.el-form__wrapper:hover {
+    border: var(--color-hover-light) !important;
+}
+
+.el-form__wrapper:focus-within {
+    border: 1px solid var(--color-border) !important;
+    box-shadow: none !important;
+}
+
+/* 选择器样式 */
+.el-select {
+    text-color: var(--color-text-primary) !important;
+}
+
+.el-select__wrapper {
+    border: var(--color-background) !important;
+}
+
+.el-select__wrapper:hover {
+    border: var(--color-hover-light) !important;
+}
+
+.el-select__wrapper:focus-within {
+    border: 1px solid var(--color-border) !important;
+    box-shadow: none !important;
+}
+
+.el-select-dropdown {
+    background-color: #FFFFFF !important;
+    color: #333 !important;
+}
+
+/* 修改悬停时选项样式 */
+.el-select-dropdown__item:hover {
+    background-color: var(--color-hover-secondary) !important;
+    color: #FFFFFF !important;
+}
+
+/* 修改选中状态样式 */
+.el-select-dropdown__item.is-selected {
+    background-color: var(--color-hover-light) !important;
+    color: var(--color-text-secondary) !important;
+    font-weight: bold;
 }

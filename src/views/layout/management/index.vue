@@ -162,7 +162,7 @@ onMounted(() => {
 <template>
   <div class="user-manage-container">
     <!-- 添加用户 -->
-    <el-button type="primary" @click="addUserDialogVisible = true">添加用户</el-button>
+    <el-button type="primary" @click="addUserDialogVisible = true">Add User</el-button>
     <!-- 添加用户对话框 -->
     <el-dialog v-model="addUserDialogVisible" title="添加用户" width="500">
       <el-form :model="form" :rules="rules" :ref="userForm" label-width="100px">
@@ -181,7 +181,7 @@ onMounted(() => {
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="cancelForm">Cancel</el-button>
+          <el-button @click="cancelForm" class="cancel-button">Cancel</el-button>
           <el-button type="primary" @click="addUser">Confirm</el-button>
         </div>
       </template>
@@ -189,17 +189,18 @@ onMounted(() => {
 
     <!-- 分页展示用户信息 -->
     <el-table class="user-table" :data="userList?.items || []" style="width: 100%">
-      <el-table-column label="用户名" prop="username"></el-table-column>
-      <el-table-column label="账户" prop="account"></el-table-column>
-      <el-table-column label="状态" prop="status">
+      <el-table-column label="Id" prop="id"></el-table-column>
+      <el-table-column label="Username" prop="username"></el-table-column>
+      <el-table-column label="Account" prop="account"></el-table-column>
+      <el-table-column label="Status" prop="status">
         <template #default="{ row }">
-          <el-tag :type="row.status ? 'success' : 'danger'">{{ row.status ? '激活' : '禁用' }}</el-tag>
+          <el-tag :type="row.status ? 'success' : 'danger'">{{ row.status ? 'Active' : 'Inactive' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="Manage">
         <template #default="{ row }">
-          <el-button @click="openEditDialog(row)" type="primary" size="small">编辑</el-button>
-          <el-button @click="handleDeleteUser(row.id)" type="danger" size="small">删除</el-button>
+          <el-button @click="openEditDialog(row)" type="primary" size="small">Edit</el-button>
+          <el-button @click="handleDeleteUser(row.id)" type="danger" size="small">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -207,21 +208,21 @@ onMounted(() => {
     <!-- 编辑用户信息 -->
     <el-dialog v-model="updateUserDialogVisible" title="编辑用户信息" width="500px">
       <el-form :model="currentUser" :rules="rules" ref="userForm" label-width="100px">
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="Username" prop="username">
           <el-input v-model="currentUser.username" />
         </el-form-item>
-        <el-form-item label="账户" prop="account">
+        <el-form-item label="Account" prop="account">
           <el-input v-model="currentUser.account" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item label="Status" prop="status">
           <el-select v-model="currentUser.status">
-            <el-option label="激活" :value="true"></el-option>
-            <el-option label="禁用" :value="false"></el-option>
+            <el-option label="Active" :value="true"></el-option>
+            <el-option label="Inactive" :value="false"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="cancelForm">Cancel</el-button>
+        <el-button @click="cancelForm" class="cancel-button">Cancel</el-button>
         <el-button type="primary" @click="updateUser">Confirm</el-button>
       </template>
     </el-dialog>

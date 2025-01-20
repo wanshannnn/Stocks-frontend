@@ -62,7 +62,7 @@ const userPageListMockAPI = Mock.mock({
     'items|200': [
         {
             'id|+1': 1,
-            username: '@cname',
+            username: '@name',
             account: '@integer(0, 1000)',
             status: '@boolean',
             createTime: '@date("yyyy-MM-dd")',
