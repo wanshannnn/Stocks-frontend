@@ -80,7 +80,7 @@ const handleSearch = () => {
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-card class="stock-card" :loading="loading" shadow="never">
+        <el-card class="latest-stock-card" :loading="loading" shadow="never">
           <el-table :data="stockData?.items" style="width: 100%">
             <el-table-column label="Name" prop="name"></el-table-column>
             <el-table-column label="Code" prop="code"></el-table-column>
@@ -120,7 +120,9 @@ p {
   color: var(--color-text-primary);
 }
 
-.stock-card {
+.latest-stock-card {
   margin-top: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
 }
 </style>

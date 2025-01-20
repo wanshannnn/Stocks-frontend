@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getPossessionStockDataByUserIdAPI } from '@/api/stock.ts';
+import { getCollectionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = '12345'; // 假设这是当前用户的ID
+const userId = '123456'; // 假设这是当前用户的ID
 const loading = ref(true);
-const possessionStocks = ref<StockInfo[] | null>(null);
+const collectionStocks = ref<StockInfo[] | null>(null);
 
-const fetchPossessionStocks = async (userId: string) => {
+const fetchCollectionStocks = async (userId: string) => {
   try {
-    const res = await getPossessionStockDataByUserIdAPI(userId);
+    const res = await getCollectionStockDataByUserIdAPI(userId);
     if (res.data.code === 0) {
-      possessionStocks.value = res.data.data;
+      const data = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+      collectionStocks.value = data;
     } else {
-      ElMessage.error('获取持有股票失败');
+      ElMessage.error('获取自选股票失败');
     }
   } catch (error) {
     ElMessage.error('请求失败');
@@ -24,15 +25,15 @@ const fetchPossessionStocks = async (userId: string) => {
 };
 
 onMounted(() => {
-  fetchPossessionStocks(userId);
+  fetchCollectionStocks(userId);
 });
 </script>
 
 <template>
-  <div class="possession-stocks-page">
-    <p>Possession</p>
-    <el-card class="stock-card" :loading="loading" shadow="never">
-      <el-table :data="possessionStocks" style="width: 100%">
+  <div class="collection-stocks-page">
+    <p>All</p>
+    <el-card class="all-stocks-card" :loading="loading" shadow="never">
+      <el-table :data="collectionStocks" style="width: 100%">
         <el-table-column label="股票名称" prop="name"></el-table-column>
         <el-table-column label="股票代码" prop="code"></el-table-column>
         <el-table-column label="当前价格" prop="price"></el-table-column>
@@ -49,8 +50,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.stock-card {
+.all-stocks-card {
   margin-top: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
 }
 
 p {

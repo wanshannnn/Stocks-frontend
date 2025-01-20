@@ -240,7 +240,11 @@ onMounted(() => {
 
 <style scoped>
 .user-manage-container {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-sizing: border-box;
   padding: 20px;
+  margin: 20px;
 }
 
 .user-table {

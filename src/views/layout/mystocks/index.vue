@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import Possession from "@/components/possession.vue";
-import Collection from "@/components/collection.vue";
+import AllStocks from "@/components/allStocks.vue";
+import HoldStocks from "@/components/holdStocks.vue";
 </script>
 
 <template>
   <div class="container">
     <el-row>
       <el-col :span="11" class="stock-container">
-        <Possession/>
+        <AllStocks/>
       </el-col>
       <el-col :span="11" class="stock-container">
-        <Collection/>
+        <HoldStocks/>
       </el-col>
     </el-row>
   </div>

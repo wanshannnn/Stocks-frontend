@@ -36,6 +36,12 @@
     --color-hover-light: #D1C4E9; /* 浅紫色悬停背景 */
 }
 
+/* 主体样式 */
+body {
+    background-color: var(--color-background) !important;
+    color: var(--color-text-primary) !important;
+}
+
 /* 主按钮样式 */
 .el-button--primary {
     background-color: var(--color-primary) !important;
@@ -49,26 +55,47 @@
     color: var(--color-text-light) !important;
 }
 
-/* 覆盖 Dropdown 下拉菜单项的默认样式 */
+/* Dropdown 下拉菜单样式 */
 .el-dropdown-menu__item {
-    background-color: #FFFFFF; /* 默认背景色 */
-    color: #333333; /* 默认文字颜色 */
+    background-color: #FFFFFF;
+    color: #333333;
 }
 
-/* 鼠标悬停时的背景色和文字颜色 */
 .el-dropdown-menu__item:hover {
-    background-color: #9B59B6 !important; /* 紫色背景 */
-    color: #FFFFFF !important; /* 白色文字 */
+    background-color: #9B59B6 !important;
+    color: #FFFFFF !important;
 }
 
-body {
-    background-color: var(--color-background) !important;
-    color: var(--color-text-primary) !important;
-}
-
+/* 卡片样式 */
 .card {
     background-color: var(--color-surface) !important;
     border: 1px solid var(--color-border) !important;
+    border-radius: 6px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
     color: var(--color-text-primary) !important;
+}
+
+/* 搜索框样式 */
+.el-input__wrapper {
+    border: var(--color-background) !important;
+}
+
+.el-input__wrapper:hover {
+    border: var(--color-hover-light) !important;
+}
+
+.el-input__wrapper:focus-within {
+    border: 1px solid var(--color-border) !important;
+    box-shadow: none !important;
+}
+
+/* 分页组件样式 */
+.el-pagination .el-pager li:hover {
+    color: var(--color-hover) !important;
+}
+
+/* 选中状态的样式 */
+.el-pagination .el-pager li.is-active {
+    color: var(--color-text-secondary) !important;
+    font-weight: bold !important;
 }
