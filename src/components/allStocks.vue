@@ -4,7 +4,7 @@ import { getCollectionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = '123456'; // 假设这是当前用户的ID
+const userId = '123456';
 const loading = ref(true);
 const collectionStocks = ref<StockInfo[] | null>(null);
 

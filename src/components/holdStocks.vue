@@ -4,7 +4,7 @@ import { getPossessionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = 'Alice';
+const userId = '123456';
 const loading = ref(true);
 const possessionStocks = ref<StockInfo[] | null>(null);
 
