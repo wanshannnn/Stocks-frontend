@@ -190,12 +190,12 @@ body {
 }
 
 .rain span:nth-child(even) {
-  background: #ff8800;
+  background: var(--color-primary-light);
   /* 橙色调 */
-  box-shadow: 0 0 10px 5px rgba(255, 150, 50, 0.5),
+  box-shadow: var(--color-secondary-light),
   /* 颜色和透明度 */
-  0 0 30px 15px rgba(200, 100, 50, 0.3),
-  0 0 50px 30px rgba(200, 50, 50, 0.1);
+  0 0 30px 15px rgba(106, 90, 205, 0.3),
+  0 0 50px 30px rgba(72, 61, 139, 0.1);
 }
 
 
@@ -229,7 +229,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
-    color: #f39c12;
+    color: var(--color-primary-light);
     margin-bottom: 20px;
   }
 

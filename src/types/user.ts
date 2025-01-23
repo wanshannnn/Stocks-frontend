@@ -1,9 +1,9 @@
 export interface UserInfo {
-    id: string;
+    id?: string;
+    role?: string;
+    token?: string;
+    createTime?: string;
     username: string;
     account: string;
-    role: string;
-    token: string;
     status: boolean;
-    createTime: string;
 }

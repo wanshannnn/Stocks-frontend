@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import {getUserPageListAPI, addUserAPI, deleteUserAPI} from '@/api/user';
+import {ElForm, ElMessage, ElMessageBox, type FormInstance} from 'element-plus';
+import {getUserPageListAPI, addUserAPI, deleteUserAPI, updateUserAPI} from '@/api/user';
 import type { UserInfo } from "@/types/user";
+import type {AxiosResponse} from "axios";
 
 // 数据与状态
 const currentPage = ref(1);
@@ -11,7 +12,7 @@ const userList = ref<{ items: UserInfo[]; total: number } | null>(null);
 const loading = ref(false);
 const addUserDialogVisible = ref(false);
 const updateUserDialogVisible = ref(false);
-const userForm = ref(null);
+const userForm = ref<FormInstance | null>(null);
 const currentUser = reactive<UserInfo>({
   username: '',
   account: '',
@@ -67,7 +68,7 @@ const addUser = async () => {
       const response = await addUserAPI(form);
       if (response.data.code === 0) {
         ElMessage.success('用户添加成功');
-        dialogVisible.value = false;
+        addUserDialogVisible.value = false;
         resetForm();
         fetchUsersByPage(currentPage.value, pageSize.value);
       } else {
@@ -90,11 +91,11 @@ const updateUser = async () => {
     try {
       const response = await updateUserAPI(currentUser);
       if (response.data.code === 0) {
-        ElMessage.success('用户更新成功');
+        ElMessage.success('update success');
         updateUserDialogVisible.value = false;
         fetchUsersByPage(currentPage.value, pageSize.value);
       } else {
-        ElMessage.error(response.data.message || '更新用户失败');
+        ElMessage.error(response.data.message || 'update failed');
       }
     } catch (error) {
       ElMessage.error('请求失败，请稍后重试');
@@ -106,19 +107,19 @@ const updateUser = async () => {
 const handleDeleteUser = async (id: number) => {
   try {
     await ElMessageBox.confirm('此操作将永久删除用户, 是否继续?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
       type: 'warning',
     });
     const res = await deleteUserAPI(id);
     if (res?.data.code === 0) {
-      ElMessage.success('删除用户成功');
+      ElMessage.success('delete success');
       fetchUsersByPage(currentPage.value, pageSize.value);
     } else {
-      ElMessage.error(res?.message || '删除用户失败');
+      ElMessage.error((res as AxiosResponse<{ message: string }>).data.message || 'delete failed');
     }
   } catch (error) {
-    ElMessage.error(error.message || '请求失败，请稍后重试');
+    ElMessage.error((error as { message: string }).message || '请求失败，请稍后重试');
   }
 };
 
@@ -136,7 +137,7 @@ const resetForm = () => {
 
 // 取消表单
 const cancelForm = () => {
-  ElMessage.info('已取消操作');
+  ElMessage.info('Operation Cancelled');
   addUserDialogVisible.value = false;
   updateUserDialogVisible.value = false;
 };
@@ -164,18 +165,18 @@ onMounted(() => {
     <!-- 添加用户 -->
     <el-button type="primary" @click="addUserDialogVisible = true">Add User</el-button>
     <!-- 添加用户对话框 -->
-    <el-dialog v-model="addUserDialogVisible" title="添加用户" width="500">
-      <el-form :model="form" :rules="rules" :ref="userForm" label-width="100px">
-        <el-form-item prop="username" label="用户名" :label-width="80">
+    <el-dialog v-model="addUserDialogVisible" title="Add User" width="500">
+      <el-form :model="form" :rules="rules" ref="userForm" label-width="100px">
+        <el-form-item prop="username" label="Username" :label-width="80">
           <el-input v-model="form.username" autocomplete="off" />
         </el-form-item>
-        <el-form-item prop="account" label="账户" :label-width="80">
+        <el-form-item prop="account" label="Account" :label-width="80">
           <el-input v-model="form.account" autocomplete="off" />
         </el-form-item>
-        <el-form-item prop="status" label="状态" :label-width="80">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option label="激活" :value="true"></el-option>
-            <el-option label="禁用" :value="false"></el-option>
+        <el-form-item prop="status" label="Status" :label-width="80">
+          <el-select v-model="form.status" placeholder="Please select status">
+            <el-option label="Activate" :value="true"></el-option>
+            <el-option label="Inactivate" :value="false"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -206,7 +207,7 @@ onMounted(() => {
     </el-table>
 
     <!-- 编辑用户信息 -->
-    <el-dialog v-model="updateUserDialogVisible" title="编辑用户信息" width="500px">
+    <el-dialog v-model="updateUserDialogVisible" title="Edit User Information" width="500px">
       <el-form :model="currentUser" :rules="rules" ref="userForm" label-width="100px">
         <el-form-item label="Username" prop="username">
           <el-input v-model="currentUser.username" />

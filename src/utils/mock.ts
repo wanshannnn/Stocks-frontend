@@ -168,7 +168,7 @@ const getLatestStockDataByPageMockAPI = Mock.mock({
             'code': function(this: any) {
                 return generateStockCode(this.id);
             },
-            'name': '@ctitle(3, 5)',
+            'name': '@title(1)',
             'price': '@float(10, 1000, 0, 2)',
             'volume': '@integer(1000, 10000)',
             'exchange': '@integer(1000, 10000)',
@@ -203,7 +203,7 @@ Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
         userId: userId,
         stockId: index + 1,
         code: generateStockCode(index + 1),
-        name: Mock.mock('@ctitle(3, 5)'),
+        name: Mock.mock('@title(1)'),
         price: Mock.mock('@float(10, 1000, 0, 2)'),
         volume: Mock.mock('@integer(1000, 10000)'),
         exchange: Mock.mock('@integer(1000, 10000)'),
@@ -226,7 +226,7 @@ Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
         userId: userId,
         stockId: index + 1,
         code: generateStockCode(index + 1),
-        name: Mock.mock('@ctitle(3, 5)'),
+        name: Mock.mock('@title(1)'),
         price: Mock.mock('@float(10, 1000, 0, 2)'),
         volume: Mock.mock('@integer(1000, 10000)'),
         exchange: Mock.mock('@integer(1000, 10000)'),

@@ -3,9 +3,10 @@ import {onMounted, ref, watch} from "vue";
 import type {StockInfo} from "@/types/stock.ts";
 import {getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI} from "@/api/stock.ts";
 import {ElMessage} from "element-plus";
+import type {StockDataInfo} from "@/types/stockData.ts";
 
 const loading = ref(false);
-const stockData = ref<StockInfo | { items: StockInfo[]; total: number } | null>(null);
+const stockData = ref<StockDataInfo | { items: StockInfo[]; total: number } | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const searchQuery = ref('');
@@ -38,9 +39,9 @@ const fetchStockDataByPage = async (page: number, size: number, id: string = '')
   }
 };
 
-watch([currentPage, pageSize], ([newPage, newSize]) => {
-  fetchUsersByPage(newPage, newSize);
-});
+// watch([currentPage, pageSize], ([newPage, newSize]) => {
+//   fetchUsersByPage(newPage, newSize);
+// });
 
 onMounted(() => {
   fetchStockDataByPage(currentPage.value, pageSize.value);

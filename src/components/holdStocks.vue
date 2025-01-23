@@ -4,7 +4,7 @@ import { getPossessionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = '12345'; // 假设这是当前用户的ID
+const userId = 'Alice';
 const loading = ref(true);
 const possessionStocks = ref<StockInfo[] | null>(null);
 
@@ -12,7 +12,7 @@ const fetchPossessionStocks = async (userId: string) => {
   try {
     const res = await getPossessionStockDataByUserIdAPI(userId);
     if (res.data.code === 0) {
-      possessionStocks.value = res.data.data;
+      possessionStocks.value = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
     } else {
       ElMessage.error('获取持有股票失败');
     }
