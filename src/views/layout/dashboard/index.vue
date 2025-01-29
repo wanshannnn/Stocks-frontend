@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { useUserInfoStore } from '@/stores/index.ts';
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import History from "@/components/history.vue";
 import Latest from "@/components/latest.vue";
+import {computed} from "vue";
 
-const userInfoStore = useUserInfoStore();
+const loginUserStore = useLoginUserStore();
+const username = computed(() => String(loginUserStore.loginUser.value.username))
 const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date());
 </script>
 
 <template>
-  <p class="welcome">Welcome {{ userInfoStore.userInfo ? '，' + userInfoStore.userInfo.username : '' }}</p>
+  <p class="welcome" v-if="username !== '未登陆'">Welcome, {{ username }}</p>
+  <p class="welcome" v-else>{{ username }}</p>
   <p class="current-date">Today：{{ today }}</p>
   <div class="dashboard-container">
     <!-- 指数 -->

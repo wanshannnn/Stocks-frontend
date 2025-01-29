@@ -1,62 +1,226 @@
 import request from '@/utils/request';
-import type {StockInfo} from "@/types/stock.ts";
+import type {GetStockListAPIResponse, StockInfo} from "@/types/stock.ts";
 
-// 根据股票 id 或 name 查询最新的股票数据
-export const getLatestStockDataByIdAPI = (id: string) => {
-    return request<{ code: number; data: StockInfo }>({
+/**
+ * 最新股票数据查询接口
+ * @param id 用户id
+ */
+export const getLatestStockDataByIdAPI = async (id: number) => {
+    const res = await request<GetStockListAPIResponse>({
         url: `/stocks/id/${id}/latest`,
         method: 'get',
     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 };
-export const getLatestStockDataByNameAPI = (name: string) => {
-    return request<{ code: number; data: StockInfo }>({
+
+/**
+ * 最新股票数据查询接口
+ * @param name 用户名
+ */
+export const getLatestStockDataByNameAPI = async (name: string) => {
+    const res = await request<GetStockListAPIResponse>({
         url: `/stocks/name/${encodeURIComponent(name)}/latest`,
         method: 'get',
     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 };
 
-// 获取最新股票数据（分页）
-export const getLatestStockDataByPageAPI = (params: any) => {
-    return request({
+/**
+ * 分页获取最新股票数据接口
+ * @param params { page: number, size: number }
+ */
+export const getLatestStockDataByPageAPI = async (params: { page: number; size: number }) => {
+    const res = await request<GetStockListAPIResponse>({
         url: `/stocks/latest/page?page=${params.page}&size=${params.size}`,
         method: 'get',
     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 };
 
-// 根据 userId 查找自选股票
-export const getCollectionStockDataByUserIdAPI = (userId: string) => {
-    return request<{ code: number; data: StockInfo }>({
+
+/**
+ * 根据用户 id 查询自选股票信息接口
+ * @param userId
+ */
+export const getCollectionStockDataByUserIdAPI = async (userId: number) => {
+    const res = await request<GetStockListAPIResponse>({
         url: `/stocks/userId/${userId}/collection`,
         method: 'get',
     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 };
 
-// 根据 userId 查找持有股票
-export const getPossessionStockDataByUserIdAPI = (userId: string) => {
-    return request<{ code: number; data: StockInfo }>({
+/**
+ * 根据用户 id 查询持有股票信息接口
+ * @param userId
+ */
+export const getPossessionStockDataByUserIdAPI = async (userId: number) => {
+     const res = await request<GetStockListAPIResponse>({
         url: `/stocks/userId/${userId}/possession`,
         method: 'get',
-    });
+     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 };
 
 
-// 根据 id 获取全部股票数据
-export const getStockDataByIdAPI = (id: string) => {
-    return request({
+/**
+ * 根据股票 id 获取历史数据接口
+ * @param id
+ */
+export const getStockDataByIdAPI = async (id: number) => {
+    const res = await request({
         url: `/stocks/id/${id}`,
         method: 'get',
     });
+
+    if (res.data.code !== 0 || !Array.isArray(res.data.data)) {
+        throw new Error(res.data.message || "获取股票数据失败");
+    }
+
+    const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
+        ...stock,
+        price: Number(stock.price),
+        exchange: `${Number(stock.exchange).toFixed(2)}%`,
+        turnover: Number(stock.turnover),
+        volume: Number(stock.volume),
+        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        highest: Number(stock.highest),
+        lowest: Number(stock.lowest),
+    }));
+
+    return {
+        ...res,
+        data: {
+            ...res.data,
+            data: convertedData
+        }
+    };
 }
 
-// 删除股票数据
-export const deleteStockDataByIdAPI = (id: string) => {
+/**
+ * 删除股票数据接口
+ */
+export const deleteStockDataByIdAPI = (id: number) => {
     return request({
         url: `/stocks/id/${id}/delete`,
         method: 'delete',
     });
 }
 
-// 添加股票数据
+/**
+ * 增加股票数据接口
+ * @param stockData
+ */
 export const addStockDataAPI = (stockData: any) => {
     return request({
         url: '/stocks/add',
@@ -65,8 +229,12 @@ export const addStockDataAPI = (stockData: any) => {
     });
 }
 
-// 更新股票数据
-export const updateStockDataByIdAPI = (id: string, stockData: any) => {
+/**
+ * 增加股票数据接口
+ * @param id
+ * @param stockData
+ */
+export const updateStockDataByIdAPI = (id: number, stockData: any) => {
     return request({
         url: `/stocks/id/${id}/update`,
         method: 'put',

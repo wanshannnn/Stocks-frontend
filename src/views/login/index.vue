@@ -2,7 +2,7 @@
 import { User, Lock } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
-import { useUserInfoStore } from '@/stores';
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import router from "@/router";
 import { loginAPI } from '@/api/user.ts';
 
@@ -11,7 +11,7 @@ let loginForm = ref({
   password: "",
 });
 const loginRef = ref();
-const userInfoStore = useUserInfoStore();
+const loginUserStore = useLoginUserStore();
 const rules = {
   username: [
     { required: true, message: "请输入用户名", trigger: "blur" },
@@ -38,9 +38,7 @@ const login = async () => {
     }
     // 登录成功
     ElMessage.success('登陆成功');
-    userInfoStore.setUserInfo(res.data);
-    userInfoStore.setAuthenticated(true);
-    console.log(userInfoStore.userInfo);
+    loginUserStore.setLoginUser(res.data);
     // 跳转到首页
     router.push('/dashboard');
   } else {
@@ -87,7 +85,7 @@ body {
   justify-content: center;
   align-items: center;
   top: 10vh;
-  height: 100vh;  /* 让容器填充整个视口高度 */
+  height: 100vh;
   background: url('@/assets/images/login_background_pc.png') no-repeat;
   background-size: cover;  /* 背景图保持比例并填充整个屏幕 */
   background-position: center center;  /* 背景图居中 */
@@ -113,7 +111,7 @@ body {
   .el-form-item {
     margin-bottom: 20px;
     display: flex;
-    justify-content: center;  /* 让内容在水平上居中 */
+    justify-content: center;
 
     .el-input {
       width: 100%;
@@ -122,7 +120,7 @@ body {
     .login_and_register {
       display: flex;
       justify-content: space-between;
-      width: 100%;  /* 确保容器占满宽度 */
+      width: 100%;
     }
 
     .el-button {
@@ -131,9 +129,9 @@ body {
       border-radius: 4px;
       padding: 10px;
       margin-top: 20px;
-      text-align: center;  /* 确保按钮内文字居中 */
-      flex: 1;  /* 每个按钮占据同样的空间 */
-      margin: 5px;  /* 按钮之间的间距 */
+      text-align: center;
+      flex: 1;
+      margin: 5px;
     }
   }
 }

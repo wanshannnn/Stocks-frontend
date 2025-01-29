@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useUserInfoStore } from '@/stores/index.ts';
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import { ElMessage, ElMessageBox } from "element-plus";
-import router from "@/router";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { fixPwdAPI } from '@/api/user';
 
 const isCollapse = ref(false);
 const dialogFormVisible = ref(false);
 const pwdRef = ref();
+const username = computed(() => String(loginUserStore.loginUser.value.username))
 const form = reactive({
   oldPwd: '',
   newPwd: '',
@@ -98,7 +98,7 @@ const getActiveAside = () => {
 };
 
 // 退出登陆时出现确认弹窗
-const userInfoStore = useUserInfoStore();
+const loginUserStore = useLoginUserStore();
 const quitFn = () => {
   ElMessageBox.confirm(
     '请确认退出登录',
@@ -109,12 +109,11 @@ const quitFn = () => {
     }
   )
   .then(() => {
-    userInfoStore.$reset(); // 清除用户信息和状态
+    loginUserStore.clearLoginUser();
     ElMessage({
       type: 'success',
       message: '退出成功',
     })
-    router.push('/login');
   })
   .catch(() => {
     ElMessage({
@@ -158,12 +157,16 @@ const quitFn = () => {
           <!-- 用户登陆情况 -->
           <el-dropdown style="float: right">
             <el-button type="primary">
-              {{ userInfoStore.userInfo ? userInfoStore.userInfo.username : '未登录' }}
+              {{ username }}
             </el-button>
             <template #dropdown>
-              <el-dropdown-menu>
+              <el-dropdown-menu v-if="username !== '未登陆'">
                 <el-dropdown-item @click="dialogFormVisible = true">修改密码</el-dropdown-item>
                 <el-dropdown-item @click="quitFn">退出登陆</el-dropdown-item>
+              </el-dropdown-menu>
+              <el-dropdown-menu v-else>
+                <el-dropdown-item @click="$router.push('/login')">去登陆</el-dropdown-item>
+                <el-dropdown-item @click="$router.push('/register')">去注册</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>

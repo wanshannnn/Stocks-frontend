@@ -1,8 +1,19 @@
 import request from '@/utils/request';
+import type {GetUserListAPIResponse} from "@/types/user.ts";
+
+/**
+ * 获取当前用户信息
+ */
+export const getCurrentUser = () => {
+    return request<GetUserListAPIResponse>({
+        url: '/user/current',
+        method: "get"
+    })
+}
 
 /**
  * 登录接口（这是JSDoc注释）
- * @param {*} param0 {username: 用户名, password: 密码}
+ * @param {*} params {username: 用户名, password: 密码}
  * @returns Promise对象
  */
 export const loginAPI = (params: any) => {
@@ -19,8 +30,6 @@ export const loginAPI = (params: any) => {
  * @returns
  */
 export const registerAPI = (params: any) => {
-    console.log(params)
-    console.log({ ...params })
     return request({
         url: '/user/register',
         method: 'post',
@@ -34,8 +43,6 @@ export const registerAPI = (params: any) => {
  * @returns
  */
 export const fixPwdAPI = (params: any) => {
-    console.log(params)
-    console.log({ ...params })
     return request({
         url: '/user/fixpwd',
         method: 'put',

@@ -1,8 +1,24 @@
 import Mock from 'mockjs';
 
 // user
+// 模拟获取当前用户信息
+Mock.mock('/api/user/current', 'get', (options: any) => {
+    return {
+        code: 0,
+        data: {
+            id: '12345',
+            roles: [['admin'],['user']],
+            token: 'abcdef123456',
+            createTime: '2025-01-01T12:00:00Z',
+            username: 'Alice',
+            account: 'alice_account',
+            status: true,
+        },
+    }
+})
+
 // 模拟登录接口
-Mock.mock('/api/user/login', 'post', (options) => {
+Mock.mock('/api/user/login', 'post', (options: any) => {
     const { username, password } = JSON.parse(options.body);
     if (username === 'Alice' && password === '123456') {
         return {
