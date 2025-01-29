@@ -4,14 +4,14 @@ import { getCollectionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = '123456';
+const userId = 123456;
 const loading = ref(true);
 const collectionStocks = ref<StockInfo[] | null>(null);
 
-const fetchCollectionStocks = async (userId: string) => {
+const fetchCollectionStocks = async (userId: number) => {
   try {
     const res = await getCollectionStockDataByUserIdAPI(userId);
-    if (res.data.code === 0) {
+    if (res.code === 0) {
       const data = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
       collectionStocks.value = data;
     } else {

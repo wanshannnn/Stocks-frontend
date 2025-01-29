@@ -1,6 +1,7 @@
 // 股票信息数据结构
 export interface StockInfo {
     id: string;         // 股票代码
+    code: string;       // 股票代码（六位）
     name: string;       // 股票名称
     price: string;      // 当前价格
     exchange: string;   // 涨跌幅（百分比）
@@ -20,10 +21,11 @@ export interface ApiResponse<T> {
 }
 
 // 具体的股票数据接口（用于返回多个股票）
-export interface StockListResponse {
+export interface StockList {
     data: StockInfo[];  // 股票列表
     total: number;      // 总条数（如果有分页）
 }
 
 // 最终用于请求的 API 类型
-export type GetStockListAPIResponse = ApiResponse<StockListResponse>;
+export type GetStockListAPIResponse = ApiResponse<StockList>;
+export type GetStockDataAPIResponse = ApiResponse<StockInfo>;

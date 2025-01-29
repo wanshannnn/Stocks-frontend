@@ -4,16 +4,16 @@ import * as echarts from "echarts";
 import { getStockDataByIdAPI } from "@/api/stock";
 
 // 用户输入的股票代码
-const input = ref<string>("");
+const input = ref<number>();
 
 // 获取股价历史数据的API函数
-const fetchStockData = async (id: string) => {
+const fetchStockData = async (id: number) => {
   try {
-    const response = await getStockDataByIdAPI(id);
-    if (response.data.code === 0) {
-      return response.data.data.items || [];
+    const res = await getStockDataByIdAPI(id);
+    if (res.code === 0) {
+      return res.data.data || [];
     } else {
-      console.error("请求错误: ", response.data.message || "未知错误");
+      console.error("请求错误: ", res.message || "未知错误");
       return [];
     }
   } catch (error) {
@@ -27,7 +27,7 @@ const chartContainer = ref<HTMLElement | null>(null);
 let chart: echarts.ECharts | null = null; // 存储 ECharts 实例
 
 // 创建 ECharts 实例并渲染图表
-const renderChart = (items: { date: string; price: number; volume: number; turnover: number; amplitude: number }[]) => {
+const renderChart = (items: { date: string; price: number; volume: number; turnover: number }[]) => {
   if (!chartContainer.value) {
     console.error("Chart container is not available.");
     return;
@@ -44,7 +44,6 @@ const renderChart = (items: { date: string; price: number; volume: number; turno
   const prices = items.map((item) => item.price);
   const volumes = items.map((item) => item.volume);
   const turnovers = items.map((item) => item.turnover);
-  const amplitudes = items.map((item) => item.amplitude);
 
   // 设置图表的配置项
   const option = {
@@ -55,7 +54,7 @@ const renderChart = (items: { date: string; price: number; volume: number; turno
       trigger: "axis",
     },
     legend: {
-      data: ["价格", "成交额", "成交量", "振幅"],
+      data: ["价格", "成交额", "成交量"],
     },
     grid: {
       left: "3%",
@@ -87,11 +86,6 @@ const renderChart = (items: { date: string; price: number; volume: number; turno
         type: "line",
         data: turnovers,
       },
-      {
-        name: "振幅",
-        type: "line",
-        data: amplitudes,
-      },
     ],
   };
 
@@ -106,7 +100,13 @@ watch(input, async (newId) => {
     if (stockData.length === 0) {
       console.error("未获取到数据或数据为空");
     } else {
-      renderChart(stockData);
+      const formattedStockData = stockData.map(stock => ({
+        date: stock.date,
+        price: Number(stock.price),
+        volume: Number(stock.volume),
+        turnover: Number(stock.turnover),
+      }));
+      renderChart(formattedStockData);
     }
   }
 });

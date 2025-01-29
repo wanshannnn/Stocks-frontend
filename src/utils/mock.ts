@@ -5,6 +5,7 @@ import Mock from 'mockjs';
 Mock.mock('/api/user/current', 'get', (options: any) => {
     return {
         code: 0,
+        message: '获取当前用户信息成功',
         data: {
             id: '12345',
             roles: [['admin'],['user']],
@@ -80,6 +81,8 @@ const userPageListMockAPI = Mock.mock({
             'id|+1': 1,
             username: '@name',
             account: '@integer(0, 1000)',
+            roles: ['user'],
+            token: '@guid()',
             status: '@boolean',
             createTime: '@date("yyyy-MM-dd")',
         }
@@ -138,7 +141,8 @@ function generateStockCode(id: number): string {
 Mock.mock(/\/stocks\/id\/\d+\/latest/, 'get', (options: any) => {
     const id = options.url.match(/\/stocks\/id\/(\d+)\/latest/)[1];
     return {
-        code: 0, // 返回的成功码
+        code: 0,
+        message: '获取成功',
         data: {
             id,
             code: generateStockCode(id),
@@ -160,6 +164,7 @@ Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
     const name = decodeURIComponent(options.url.match(/\/stocks\/name\/([^/]+)\/latest/)[1]);
     return {
         code: 0,
+        message: '获取成功',
         data: {
             id: Mock.mock('@integer(1, 100000)'),
             name,
@@ -178,13 +183,13 @@ Mock.mock(/\/stocks\/name\/[^/]+\/latest/, 'get', (options: any) => {
 
 // 模拟分页获取最新的所有股票数据
 const getLatestStockDataByPageMockAPI = Mock.mock({
-    'items|200': [
+    'data|200': [
         {
             'id|+1': 1,
             'code': function(this: any) {
                 return generateStockCode(this.id);
             },
-            'name': '@title(1)',
+            'name': '@ctitle(3, 5)',
             'price': '@float(10, 1000, 0, 2)',
             'volume': '@integer(1000, 10000)',
             'exchange': '@integer(1000, 10000)',
@@ -202,12 +207,13 @@ Mock.mock(/\/stocks\/latest\/page/, 'get', (options: any) => {
     const size = parseInt(urlParams.get('size') || '10');
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
-    const items = getLatestStockDataByPageMockAPI.items.slice(startIndex, endIndex);
+    const data = getLatestStockDataByPageMockAPI.data.slice(startIndex, endIndex);
     return {
         code: 0,
+        message: '获取成功',
         data: {
-            items,
-            total: getLatestStockDataByPageMockAPI.items.length,
+            data,
+            total: getLatestStockDataByPageMockAPI.data.length,
         }
     };
 });
@@ -231,6 +237,7 @@ Mock.mock(/\/stocks\/userId\/\d+\/collection/, 'get', (options: any) => {
     }));
     return {
         code: 0,
+        message: '获取成功',
         data: stockList,
     };
 });
@@ -254,14 +261,20 @@ Mock.mock(/\/stocks\/userId\/\d+\/possession/, 'get', (options: any) => {
     }));
     return {
         code: 0,
+        message: '获取成功',
         data: stockList,
     };
 });
 
+
 // 模拟股票 id 获取全部股票数据
 const getStockDataByIdMockAPI = Mock.mock({
-    'items|200': [
+    'data|200': [
         {
+            'id|+1': 1,
+            'code': function(this: any) {
+                return generateStockCode(this.id);
+            },
             'name': '@ctitle(3, 5)',
             'price': '@float(10, 1000, 0, 2)',
             'volume': '@integer(1000, 10000)',
@@ -276,13 +289,14 @@ const getStockDataByIdMockAPI = Mock.mock({
 });
 Mock.mock(/\/stocks\/id\/\d+/, 'get', (options: any) => {
     const id = options.url.match(/\/stocks\/id\/(\d+)/)[1];
-    const items = getStockDataByIdMockAPI.items;
+    const data = getStockDataByIdMockAPI.data;
     return {
         code: 0,
+        message: '获取成功',
         data: {
             id,
             code: generateStockCode(id),
-            items,
+            data,
         }
     };
 });

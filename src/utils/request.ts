@@ -1,18 +1,17 @@
 import axios from 'axios'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
-import { useUserInfoStore } from '@/stores'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
 const instance = axios.create({
     baseURL: '/api',
     timeout: 5000,});
 
-const userInfoStore = useUserInfoStore();
-
 // 定义请求拦截器
 instance.interceptors.request.use(
     (config) => {
-        const token = userInfoStore.userInfo ? userInfoStore.userInfo.token : null;
+        const loginUserStore = useLoginUserStore();
+        const token = loginUserStore.loginUser?.token;
         if (token) {
             config.headers.Authorization = token;
         }
@@ -33,11 +32,11 @@ instance.interceptors.response.use(
         return response;
     },
     (error) => {
-        console.dir(error);
+        const loginUserStore = useLoginUserStore();
         if (error.response.status === 401) {
-            userInfoStore.userInfo = null;
+            loginUserStore.clearLoginUser();
             ElMessage.error('用户身份已过期');
-            router.push('/login');
+            router.push('/');
         }
         return Promise.reject(error);
     }

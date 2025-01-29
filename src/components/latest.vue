@@ -1,47 +1,42 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import type {StockInfo} from "@/types/stock.ts";
-import {getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI} from "@/api/stock.ts";
-import {ElMessage} from "element-plus";
-import type {StockDataInfo} from "@/types/stockData.ts";
+import { onMounted, ref } from "vue";
+import type {  StockList } from "@/types/stock.ts";
+import { getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI } from "@/api/stock.ts";
 
 const loading = ref(false);
-const stockData = ref<StockDataInfo | { items: StockInfo[]; total: number } | null>(null);
+const stockData = ref<StockList | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const searchQuery = ref('');
 
-const fetchStockDataByPage = async (page: number, size: number, id: string = '') => {
+const fetchStockDataByPage = async (page: number, size: number, query: string = '') => {
   loading.value = true;
   try {
     let res;
-    if (id.trim()) {
-      if (/^\d+$/.test(id)) {
-        res = await getLatestStockDataByIdAPI(id);
+    if (query.trim()) {
+      if (/^\d+$/.test(query)) {
+        res = await getLatestStockDataByIdAPI(query);
       } else {
-        res = await getLatestStockDataByNameAPI(id);
+        res = await getLatestStockDataByNameAPI(query);
       }
+      if (!res || res.code !== 0 || !res.data) {
+        throw new Error("查询股票数据失败，数据为空或格式错误");
+      }
+      stockData.value = { data: [res.data], total: 1 };
     } else {
-      res = await getLatestStockDataByPageAPI({
-        page: page,
-        size: size
-      });
-    }
-    if (res.data.code === 0) {
-      stockData.value = res.data.data;
-    } else {
-      ElMessage.error('获取数据失败');
+      res = await getLatestStockDataByPageAPI({ page, size });
+
+      if (!res || res.code !== 0 || !res.data || !Array.isArray(res.data.data)) {
+        throw new Error("分页查询股票数据失败，数据为空或格式错误");
+      }
+      stockData.value = res.data;
     }
   } catch (error) {
-    ElMessage.error('请求失败');
+    console.error("获取股价数据失败:", error);
   } finally {
     loading.value = false;
   }
 };
-
-// watch([currentPage, pageSize], ([newPage, newSize]) => {
-//   fetchUsersByPage(newPage, newSize);
-// });
 
 onMounted(() => {
   fetchStockDataByPage(currentPage.value, pageSize.value);
@@ -82,7 +77,7 @@ const handleSearch = () => {
     <el-row>
       <el-col :span="24">
         <el-card class="latest-stock-card" :loading="loading" shadow="never">
-          <el-table :data="stockData?.items" style="width: 100%">
+          <el-table :data="stockData?.data" style="width: 100%">
             <el-table-column label="Name" prop="name"></el-table-column>
             <el-table-column label="Code" prop="code"></el-table-column>
             <el-table-column label="Price" prop="price"></el-table-column>

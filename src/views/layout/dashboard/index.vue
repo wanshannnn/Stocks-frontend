@@ -5,13 +5,12 @@ import Latest from "@/components/latest.vue";
 import {computed} from "vue";
 
 const loginUserStore = useLoginUserStore();
-const username = computed(() => String(loginUserStore.loginUser.value.username))
+const username = computed(() => loginUserStore.loginUser?.username ?? '未登录用户');
 const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date());
 </script>
 
 <template>
-  <p class="welcome" v-if="username !== '未登陆'">Welcome, {{ username }}</p>
-  <p class="welcome" v-else>{{ username }}</p>
+  <p class="welcome">Welcome, {{ username }}</p>
   <p class="current-date">Today：{{ today }}</p>
   <div class="dashboard-container">
     <!-- 指数 -->

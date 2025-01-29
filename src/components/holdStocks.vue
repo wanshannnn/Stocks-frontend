@@ -4,15 +4,16 @@ import { getPossessionStockDataByUserIdAPI } from '@/api/stock.ts';
 import { ElMessage } from 'element-plus';
 import type { StockInfo } from '@/types/stock.ts';
 
-const userId = '123456';
+const userId = 123456;
 const loading = ref(true);
 const possessionStocks = ref<StockInfo[] | null>(null);
 
-const fetchPossessionStocks = async (userId: string) => {
+const fetchPossessionStocks = async (userId: number) => {
   try {
     const res = await getPossessionStockDataByUserIdAPI(userId);
-    if (res.data.code === 0) {
-      possessionStocks.value = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+    if (res.code === 0) {
+      const data = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+      possessionStocks.value = data;
     } else {
       ElMessage.error('获取持有股票失败');
     }

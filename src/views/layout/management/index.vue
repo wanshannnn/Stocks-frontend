@@ -5,7 +5,6 @@ import {getUserPageListAPI, addUserAPI, deleteUserAPI, updateUserAPI} from '@/ap
 import type { UserInfo } from "@/types/user";
 import type {AxiosResponse} from "axios";
 
-// 数据与状态
 const currentPage = ref(1);
 const pageSize = ref(20);
 const userList = ref<{ items: UserInfo[]; total: number } | null>(null);
@@ -14,10 +13,14 @@ const addUserDialogVisible = ref(false);
 const updateUserDialogVisible = ref(false);
 const userForm = ref<FormInstance | null>(null);
 const currentUser = reactive<UserInfo>({
+  id: 0,
+  role: 'user',
+  token: '',
+  createTime: '',
   username: '',
   account: '',
   status: false,
-});
+})
 const form = reactive({
   username: '',
   account: '',
@@ -129,6 +132,10 @@ const resetForm = () => {
   form.account = '';
   form.status = '';
   Object.assign(currentUser, {
+    id: 0,
+    role: 'user',
+    token: '',
+    createTime: '',
     username: '',
     account: '',
     status: false,

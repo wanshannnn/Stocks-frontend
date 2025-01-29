@@ -8,7 +8,7 @@ import { fixPwdAPI } from '@/api/user';
 const isCollapse = ref(false);
 const dialogFormVisible = ref(false);
 const pwdRef = ref();
-const username = computed(() => String(loginUserStore.loginUser.value.username))
+const username = computed(() => loginUserStore.loginUser?.username ?? '未登录用户');
 const form = reactive({
   oldPwd: '',
   newPwd: '',
@@ -160,7 +160,7 @@ const quitFn = () => {
               {{ username }}
             </el-button>
             <template #dropdown>
-              <el-dropdown-menu v-if="username !== '未登陆'">
+              <el-dropdown-menu v-if="loginUserStore.loginUser">
                 <el-dropdown-item @click="dialogFormVisible = true">修改密码</el-dropdown-item>
                 <el-dropdown-item @click="quitFn">退出登陆</el-dropdown-item>
               </el-dropdown-menu>

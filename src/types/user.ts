@@ -17,16 +17,11 @@ export interface ApiResponse<T> {
 }
 
 // 具体的用户数据接口（用于返回多个用户）
-export interface UserListResponse {
+export interface UserList {
     data: UserInfo[];  // 用户列表
     total: number;      // 总条数（如果有分页）
 }
 
-// 用户列表响应
-export interface UserListResponse {
-    data: UserInfo[];   // 用户列表
-    total: number;      // 总数
-}
-
 // 最终用于请求的 API 类型
-export type GetUserListAPIResponse = ApiResponse<UserListResponse>;
+export type GetUserListAPIResponse = ApiResponse<UserList>;
+export type GetUserAPIResponse = ApiResponse<UserInfo>;

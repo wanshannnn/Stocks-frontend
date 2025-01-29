@@ -1,10 +1,10 @@
-import { ref } from "vue";
-import { getCurrentUser } from "@/api/user.ts";
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { getCurrentUser } from '@/api/user.ts';
+import type { UserInfo } from '@/types/user.ts';
 
-export const useLoginUserStore = () => {
-    const loginUser = ref<any>({
-        username: "未登陆",
-    })
+export const useLoginUserStore = defineStore('loginUser', () => {
+    const loginUser = ref<UserInfo | null>(null);
 
     async function fetchLoginUser() {
         const res = await getCurrentUser();
@@ -13,15 +13,13 @@ export const useLoginUserStore = () => {
         }
     }
 
-    function setLoginUser(newLoginUser: any) {
+    function setLoginUser(newLoginUser: UserInfo | null) {
         loginUser.value = newLoginUser;
     }
 
     function clearLoginUser() {
-        loginUser.value = {
-            username: "未登陆",
-        };
+        loginUser.value = null;
     }
 
-    return {loginUser, fetchLoginUser, setLoginUser, clearLoginUser};
-}
+    return { loginUser, fetchLoginUser, setLoginUser, clearLoginUser };
+});

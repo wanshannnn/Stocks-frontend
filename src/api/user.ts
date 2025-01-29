@@ -1,15 +1,16 @@
 import request from '@/utils/request';
-import type {GetUserListAPIResponse} from "@/types/user.ts";
+import type {GetUserAPIResponse, GetUserListAPIResponse} from "@/types/user.ts";
 
 /**
  * 获取当前用户信息
  */
 export const getCurrentUser = () => {
-    return request<GetUserListAPIResponse>({
+    return request<GetUserAPIResponse>({
         url: '/user/current',
         method: "get"
     })
 }
+
 
 /**
  * 登录接口（这是JSDoc注释）
@@ -24,6 +25,7 @@ export const loginAPI = (params: any) => {
     })
 }
 
+
 /**
  * 注册接口
  * @param params 注册的DTO对象
@@ -36,6 +38,7 @@ export const registerAPI = (params: any) => {
         data: { ...params }
     })
 }
+
 
 /**
  * 修改密码接口
@@ -50,6 +53,7 @@ export const fixPwdAPI = (params: any) => {
     })
 }
 
+
 /**
  * 管理员添加用户
  * @param params 添加用户的DTO对象
@@ -63,17 +67,19 @@ export const addUserAPI = (params: any) => {
     })
 }
 
+
 /**
  * 获取用户分页列表
  * @param params 分页查询DTO
  * @returns
  */
 export const getUserPageListAPI = (params: any) => {
-    return request({
+    return request<GetUserListAPIResponse>({
         url: `/user/page?page=${params.page}&size=${params.size}`,
         method: 'get',
     });
 };
+
 
 /**
  * 根据id获取用户信息，用于回显
@@ -87,6 +93,7 @@ export const getUserByIdAPI = (id: number) => {
     })
 }
 
+
 /**
  * 修改用户信息
  * @param params 更新用户信息的DTO对象
@@ -99,6 +106,7 @@ export const updateUserAPI = (params: any) => {
         data: { ...params }
     })
 }
+
 
 /**
  * 管理员根据id删除用户
