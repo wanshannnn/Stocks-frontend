@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { User, Lock } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import router from "@/router";
 import { loginAPI } from '@/api/user.ts';
 
-let loginForm = ref({
+let loginForm = reactive({
   username: "",
   password: "",
 });
@@ -25,23 +25,19 @@ const rules = {
 
 const login = async () => {
   console.log('loginRef:', loginRef.value);
-  // 先校验输入内容格式正确
   const valid = await loginRef.value.validate();
-  // 通过校验，开始加载
   if (valid) {
-    const { data: res } = await loginAPI(loginForm.value);
+    const { data: res } = await loginAPI(loginForm);
     console.log(res);
-    // 登录失败
-    if ( res.code !== 0 ) {
-      ElMessage.error(res.message || '登录失败');
-      return false;
+    if (res.code === 0 && res.data) {
+      ElMessage.success("登陆成功");
+      await loginUserStore.fetchLoginUser();
+      router.push({ path: '/' }).then(() => {
+        location.reload();
+      });
     }
-    // 登录成功
-    ElMessage.success('登陆成功');
-    loginUserStore.setLoginUser(res.data);
-    // 跳转到首页
-    router.push('/dashboard');
   } else {
+    ElMessage.error("登陆失败")
     return false;
   }
 }

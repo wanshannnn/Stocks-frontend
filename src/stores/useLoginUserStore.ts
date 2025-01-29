@@ -21,5 +21,11 @@ export const useLoginUserStore = defineStore('loginUser', () => {
         loginUser.value = null;
     }
 
-    return { loginUser, fetchLoginUser, setLoginUser, clearLoginUser };
+    return {
+        loginUser, fetchLoginUser, setLoginUser, clearLoginUser
+    };
+}, {
+    persist: {
+        storage: localStorage,
+    },
 });
