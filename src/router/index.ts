@@ -1,68 +1,127 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { constantRoute, anyRoute } from "@/router/routes.ts";
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
+
+const constantRoute = [
+  {
+    path: '/user/login',
+    component: () => import('@/views/login/index.vue'),
+    name: 'login',
+    meta: {
+      title: '登录',
+      hidden: true,
+      icon: '',
+      requiresAuth: false,
+    },
+  },
+  {
+    path: '/user/register',
+    component: () => import('@/views/register/index.vue'),
+    name: 'register',
+    meta: {
+      title: '注册',
+      hidden: true,
+      icon: '',
+      requiresAuth: false,
+    },
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    meta: {
+      title: '404',
+      hidden: true,
+      icon: '',
+      requiresAuth: false,
+    },
+  },
+  {
+    path: '/',
+    component: () => import('@/views/layout/index.vue'),
+    name: 'layout',
+    meta: {
+      title: '',
+      hidden: false,
+      icon: '',
+      requiresAuth: false,
+    },
+    redirect: '/dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/layout/dashboard/index.vue'),
+        name: 'dashboard',
+        meta: {
+          title: 'Dashboard',
+          icon: 'House',
+          requiresAuth: false,
+        },
+      },
+      {
+        path: '/mystocks',
+        component: () => import('@/views/layout/mystocks/index.vue'),
+        name: 'mystocks',
+        meta: {
+          title: 'MyStocks',
+          icon: 'Document',
+          requiresAuth: false,
+        },
+      },
+      {
+        path: '/management',
+        component: () => import('@/views/layout/management/index.vue'),
+        name: 'management',
+        meta: {
+          title: 'Management',
+          icon: 'Management',
+          requiresAuth: true,
+          roles: 1
+        },
+      },
+      {
+        path: '/profile',
+        component: () => import('@/views/layout/profile/index.vue'),
+        name: 'profile',
+        meta: {
+          title: 'Profile',
+          icon: 'User',
+          requiresAuth: false,
+        },
+      },
+    ],
+  },
+];
+
+// 任意路由，用于将任何未匹配到的路径重定向到404页面
+const anyRoute = {
+  path: '/:pathMatch(.*)*',
+  redirect: '/404',
+  name: 'any',
+  meta: {
+    title: '任意路由',
+    hidden: true,
+    icon: '',
+    requiresAuth: false,
+  },
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: constantRoute,
-  scrollBehavior(to) {
-    if (to.hash) {
-      return { el: to.hash }; // 支持锚点导航
-    }
-    return { left: 0, top: 0 };
+  routes: [...constantRoute, anyRoute],
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }; // 页面滚动至顶部
   },
 });
 
-// // 路由守卫
-// router.beforeEach(async (to, from, next) => {
-//   const userInfoStore = useUserInfoStore();
-//   const { roles, isAuthenticated } = userInfoStore;
-//
-//   // 未认证用户逻辑
-//   if (!isAuthenticated) {
-//     if (['/login', '/register'].includes(to.path)) {
-//       return next(); // 放行登录或注册页
-//     }
-//     return next('/login'); // 未认证用户重定向到登录页
-//   }
-//
-//   // 已登录用户逻辑
-//   if (to.path === '/login') {
-//     return next('/'); // 登录后禁止访问登录页
-//   }
-//
-//   addDynamicRoutes(roles);
-//
-//   // 检查目标路径是否有权限
-//   const targetRoute = router.getRoutes().find((route) => route.path === to.path);
-//   if (targetRoute?.meta?.roles) {
-//     const routeRoles = targetRoute.meta.roles as string[];
-//     const hasPermission = roles.some((role) => routeRoles.includes(role));
-//     if (!hasPermission) {
-//       return next('/404'); // 无权限跳转到404
-//     }
-//   }
-//
-//   next(); // 放行
-// });
-//
-// // 根据用户角色过滤路由
-// function filterAsyncRoutes(routes: any, roles: any) {
-//   return routes.filter((route: any) => {
-//     const routeRoles = route.meta?.roles;
-//     // 如果路由没有角色限制，所有用户都可访问
-//     if (!routeRoles) {
-//       return true;
-//     }
-//     // 如果有角色限制，严格匹配用户角色
-//     return roles.some((role: any) => routeRoles.includes(role));
-//   });
-// }
-//
-// function addDynamicRoutes(roles: any) {
-//   const accessibleRoutes = filterAsyncRoutes(asyncRoute, roles);
-//   accessibleRoutes.forEach((route: any) => router.addRoute(route));
-//   router.addRoute(anyRoute); // 添加通配路由（404）
-// }
-//
+// 导航守卫
+router.beforeEach((to, from, next) => {
+  const loginUserStore = useLoginUserStore();
+
+  if (to.meta.requiresAuth && !loginUserStore.loginUser) {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
+});
+
 export default router;

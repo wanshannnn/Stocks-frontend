@@ -2,11 +2,35 @@
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import History from "@/components/history.vue";
 import Latest from "@/components/latest.vue";
-import {computed} from "vue";
+import { computed, onMounted, reactive } from "vue";
+import {getIndexesAPI} from "@/api/indexes.ts";
 
 const loginUserStore = useLoginUserStore();
 const username = computed(() => loginUserStore.loginUser?.username ?? '未登录用户');
 const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date());
+let indexes = reactive({
+  SHCOMP: 0,
+  SZCOMP: 0,
+  ChiNext: 0,
+  CSI300: 0
+});
+
+onMounted(async () => {
+  try {
+    const res = await getIndexesAPI();
+    if (res.data.code === 0) {
+      indexes.SHCOMP = res.data.data.SHCOMP;
+      indexes.SZCOMP = res.data.data.SZCOMP;
+      indexes.ChiNext = res.data.data.ChiNext;
+      indexes.CSI300 = res.data.data.CSI300;
+    } else {
+      console.error('获取指数数据失败');
+    }
+  } catch (error) {
+    console.error('请求指数数据失败', error);
+  }
+});
+
 </script>
 
 <template>
@@ -18,25 +42,25 @@ const today = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric',
       <el-col :span="6">
         <div class="index-container">
           <h3>SHCOMP</h3>
-          <h4>3241.82</h4>
+          <h4>{{ indexes.SHCOMP }}</h4>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="index-container">
           <h3>SZCOMP</h3>
-          <h4>10161.32</h4>
+          <h4>{{ indexes.SZCOMP }}</h4>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="index-container">
           <h3>ChiNext</h3>
-          <h4>2067.27</h4>
+          <h4>{{ indexes.ChiNext }}</h4>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="index-container">
           <h3>CSI300</h3>
-          <h4>3812.34</h4>
+          <h4>{{ indexes.CSI300 }}</h4>
         </div>
       </el-col>
     </el-row>

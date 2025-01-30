@@ -1,7 +1,7 @@
 // 用户数据结构
 export interface UserInfo {
     id: number;              // 用户ID
-    role: 'user' | 'admin';  // 角色
+    role: number;            // 角色，0为普通用户，1为管理员
     token: string;           // token
     createTime: string;      // 用户创建时间
     username: string;        // 用户名

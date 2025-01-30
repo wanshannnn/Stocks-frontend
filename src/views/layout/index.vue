@@ -165,8 +165,8 @@ const quitFn = () => {
                 <el-dropdown-item @click="quitFn">退出登陆</el-dropdown-item>
               </el-dropdown-menu>
               <el-dropdown-menu v-else>
-                <el-dropdown-item @click="$router.push('/login')">去登陆</el-dropdown-item>
-                <el-dropdown-item @click="$router.push('/register')">去注册</el-dropdown-item>
+                <el-dropdown-item @click="$router.push('/user/login')">去登陆</el-dropdown-item>
+                <el-dropdown-item @click="$router.push('/user/register')">去注册</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>

@@ -52,7 +52,10 @@ const registerFn = async () => {
     }
     // 注册成功
     ElMessage.success('注册成功!');
-    router.push('/login');
+    router.push({
+      path: '/user/login',
+      replace: true,
+    });
   } else {
     return false;
   }
@@ -130,7 +133,7 @@ const registerFn = async () => {
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="register_btn" @click="registerFn">注册</el-button>
-          <el-link class="router" type="info" @click="$router.push('/login')">去登录</el-link>
+          <el-link class="router" type="info" @click="$router.push('/user/login')">去登录</el-link>
         </el-form-item>
       </el-form>
     </div>

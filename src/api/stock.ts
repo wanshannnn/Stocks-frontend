@@ -129,10 +129,10 @@ export const getCollectionStockDataByUserIdAPI = async (userId: number) => {
     const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
         ...stock,
         price: Number(stock.price),
-        exchange: `${Number(stock.exchange).toFixed(2)}%`,
-        turnover: Number(stock.turnover),
-        volume: Number(stock.volume),
-        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        exchange: `${(Number(stock.exchange) / 100).toFixed(2)}%`,
+        turnover: stock.turnover,
+        volume: stock.volume,
+        amplitude: `${(Number(stock.amplitude) / 100).toFixed(2)}%`,
         highest: Number(stock.highest),
         lowest: Number(stock.lowest),
     }));
@@ -165,10 +165,10 @@ export const getPossessionStockDataByUserIdAPI = async (userId: number) => {
     const convertedData: StockInfo[] = res.data.data.map((stock: any) => ({
         ...stock,
         price: Number(stock.price),
-        exchange: `${Number(stock.exchange).toFixed(2)}%`,
-        turnover: Number(stock.turnover),
-        volume: Number(stock.volume),
-        amplitude: `${Number(stock.amplitude).toFixed(2)}%`,
+        exchange: `${(Number(stock.exchange) / 100).toFixed(2)}%`,
+        turnover: stock.turnover,
+        volume: stock.volume,
+        amplitude: `${(Number(stock.amplitude) / 100).toFixed(2)}%`,
         highest: Number(stock.highest),
         lowest: Number(stock.lowest),
     }));

@@ -8,7 +8,7 @@ Mock.mock('/api/user/current', 'get', (options: any) => {
         message: '获取当前用户信息成功',
         data: {
             id: '12345',
-            roles: [['admin'],['user']],
+            roles: 1,
             token: 'abcdef123456',
             createTime: '2025-01-01T12:00:00Z',
             username: 'Alice',
@@ -29,7 +29,7 @@ Mock.mock('/api/user/login', 'post', (options: any) => {
                 id: '12345',
                 username: 'Alice',
                 account: 'alice_account',
-                roles: [['admin'],['user']],
+                roles: 1,
                 token: 'abcdef123456',
                 status: true,
                 createTime: '2025-01-01T12:00:00Z',
@@ -336,3 +336,17 @@ Mock.mock(/\/stocks\/id\/\d+\/update/, 'put', (options: any) => {
         }
     };
 });
+
+// indexes
+Mock.mock('/api/indexes', 'get', (options: any) => {
+    return {
+        code: 0,
+        message: '获取指数数据成功',
+        data: {
+            SHCOMP: 3241.82,
+            SZCOMP: 10161.32,
+            ChiNext: 2067.27,
+            CSI300: 3812.34,
+        },
+    }
+})
