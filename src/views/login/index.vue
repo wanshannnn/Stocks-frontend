@@ -61,6 +61,7 @@ const login = async () => {
           <el-form-item class="login_and_register">
             <el-button class="login_btn" type="primary" @click="login">登陆</el-button>
             <el-button type="info" @click="$router.push('/user/register')">注册</el-button>
+            <el-link class="router" type="info" @click="$router.push('/dashboard')">跳过登陆</el-link>
           </el-form-item>
         </el-form>
       </el-col>

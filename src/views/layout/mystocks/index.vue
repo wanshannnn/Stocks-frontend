@@ -6,10 +6,10 @@ import HoldStocks from "@/components/holdStocks.vue";
 <template>
   <div class="mystocks-container">
     <el-row>
-      <el-col :span="11" class="stock-container">
+      <el-col :xs="24" :sm="11" :md="11" class="stock-container">
         <AllStocks/>
       </el-col>
-      <el-col :span="11" class="stock-container">
+      <el-col :xs="24" :sm="11" :md="11" class="stock-container">
         <HoldStocks/>
       </el-col>
     </el-row>
@@ -22,6 +22,6 @@ import HoldStocks from "@/components/holdStocks.vue";
   border-radius: 6px;
   box-sizing: border-box;
   padding: 20px;
-  margin: 20px;
+  margin: 10px;
 }
 </style>

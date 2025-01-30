@@ -84,10 +84,12 @@ p {
 .hold-earning-title {
   text-align: center;
   padding-top: 10px;
+  font-size: min(2vw, 20px);
 }
 
 .hold-earning-text {
   text-align: center;
   padding-bottom: 10px;
+  font-size: min(2vw, 20px);
 }
 </style>

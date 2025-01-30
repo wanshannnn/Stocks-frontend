@@ -214,7 +214,7 @@ body {
 
 .register_container {
   z-index: 10;
-  width: 400px;
+  width: min(400px, 80%);
   height: 340px;
   position: absolute;
   left: 50%;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import type {  StockList } from "@/types/stock.ts";
 import { getLatestStockDataByIdAPI, getLatestStockDataByNameAPI, getLatestStockDataByPageAPI } from "@/api/stock.ts";
 
@@ -8,6 +8,7 @@ const stockData = ref<StockList | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const searchQuery = ref('');
+const paginationLayout = ref('total, prev, pager, next, jumper');
 
 const fetchStockDataByPage = async (page: number, size: number, query: string = '') => {
   loading.value = true;
@@ -55,6 +56,24 @@ const handleSearch = () => {
     fetchStockDataByPage(currentPage.value, pageSize.value);
   }
 };
+
+// 监听屏幕大小变化
+const updatePaginationLayout = () => {
+  if (window.innerWidth <= 768) {
+    paginationLayout.value = 'prev, pager, next'; // 小屏幕只显示上一页、页码和下一页
+  } else {
+    paginationLayout.value = 'total, prev, pager, next, jumper'; // 大屏幕显示完整分页
+  }
+};
+
+onMounted(() => {
+  updatePaginationLayout();
+  window.addEventListener('resize', updatePaginationLayout);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updatePaginationLayout);
+});
 </script>
 
 <template>
@@ -62,11 +81,10 @@ const handleSearch = () => {
       <el-col :span="8">
         <p>Latest</p>
       </el-col>
-      <el-col :span="4"></el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <el-input
             v-model="searchQuery"
-            placeholder="Please fill in the stock code or name"
+            placeholder="请填写股票代码或名称"
             suffix-icon="el-icon-search"
             clearable
             @input="handleSearch"
@@ -94,7 +112,7 @@ const handleSearch = () => {
               v-model:current-page="currentPage"
               v-model:page-size="pageSize"
               :total="stockData?.total"
-              layout="total, prev, pager, next, jumper"
+              :layout="paginationLayout"
               @current-change="handlePageChange"
           />
         </el-card>
@@ -106,12 +124,13 @@ const handleSearch = () => {
 .el-pagination {
   margin-top: 20px;
   text-align: center;
+  justify-content: center;
 }
 
 p {
   margin: 5px;
   font-family: 'Georgia', serif;
-  font-size: 20px;
+  font-size: min(2vw, 20px);
   font-weight: bold;
   color: var(--color-text-primary);
 }

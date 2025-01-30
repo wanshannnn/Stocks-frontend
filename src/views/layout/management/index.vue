@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import {ref, reactive, onMounted, onBeforeUnmount} from 'vue';
 import {ElForm, ElMessage, ElMessageBox, type FormInstance} from 'element-plus';
 import {getUserPageListAPI, addUserAPI, deleteUserAPI, updateUserAPI} from '@/api/user';
 import type { UserInfo } from "@/types/user";
@@ -7,14 +7,15 @@ import type {AxiosResponse} from "axios";
 
 const currentPage = ref(1);
 const pageSize = ref(20);
-const userList = ref<{ items: UserInfo[]; total: number } | null>(null);
+const userList = ref<{ data: UserInfo[]; total: number } | null>(null);
 const loading = ref(false);
+const paginationLayout = ref('total, prev, pager, next, jumper');
 const addUserDialogVisible = ref(false);
 const updateUserDialogVisible = ref(false);
 const userForm = ref<FormInstance | null>(null);
-const currentUser = reactive<UserInfo>({
+let currentUser = reactive<UserInfo>({
   id: 0,
-  role: 'user',
+  role: -1,
   token: '',
   createTime: '',
   username: '',
@@ -164,6 +165,24 @@ const handlePageChange = (page: number) => {
 onMounted(() => {
   fetchUsersByPage(currentPage.value, pageSize.value);
 });
+
+// 监听屏幕大小变化
+const updatePaginationLayout = () => {
+  if (window.innerWidth <= 768) {
+    paginationLayout.value = 'prev, pager, next'; // 小屏幕只显示上一页、页码和下一页
+  } else {
+    paginationLayout.value = 'total, prev, pager, next, jumper'; // 大屏幕显示完整分页
+  }
+};
+
+onMounted(() => {
+  updatePaginationLayout();
+  window.addEventListener('resize', updatePaginationLayout);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updatePaginationLayout);
+});
 </script>
 
 
@@ -196,16 +215,16 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 分页展示用户信息 -->
-    <el-table class="user-table" :data="userList?.items || []" style="width: 100%">
-      <el-table-column label="Id" prop="id"></el-table-column>
-      <el-table-column label="Username" prop="username"></el-table-column>
-      <el-table-column label="Account" prop="account"></el-table-column>
-      <el-table-column label="Status" prop="status">
+    <el-table class="user-table" :data="userList?.data || []" style="width: 100%; table-layout: fixed;">
+      <el-table-column label="Id" prop="id" min-width="80"></el-table-column>
+      <el-table-column label="Username" prop="username" min-width="120"></el-table-column>
+      <el-table-column label="Account" prop="account" min-width="120"></el-table-column>
+      <el-table-column label="Status" prop="status" min-width="100">
         <template #default="{ row }">
           <el-tag :type="row.status ? 'success' : 'danger'">{{ row.status ? 'Active' : 'Inactive' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Manage">
+      <el-table-column label="Manage" min-width="160">
         <template #default="{ row }">
           <el-button @click="openEditDialog(row)" type="primary" size="small">Edit</el-button>
           <el-button @click="handleDeleteUser(row.id)" type="danger" size="small">Delete</el-button>
@@ -241,7 +260,7 @@ onMounted(() => {
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
       :total="userList?.total"
-      layout="total, prev, pager, next, jumper"
+      :layout="paginationLayout"
       @current-change="handlePageChange"
     />
   </div>
@@ -258,10 +277,12 @@ onMounted(() => {
 
 .user-table {
   margin-top: 20px;
+  width: 100%;
 }
 
 .el-pagination {
   margin-top: 20px;
   text-align: center;
+  justify-content: center;
 }
 </style>

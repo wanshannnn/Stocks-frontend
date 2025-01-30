@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts';
 import { ElMessage, ElMessageBox } from "element-plus";
-import { computed, reactive, ref } from "vue";
+import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
 import { useRoute } from "vue-router";
 import { fixPwdAPI } from '@/api/user';
 
-const isCollapse = ref(false);
+const isCollapse = ref(false); // 菜单栏默认展开
 const dialogFormVisible = ref(false);
 const pwdRef = ref();
 const username = computed(() => loginUserStore.loginUser?.username ?? '未登录用户');
@@ -97,6 +97,27 @@ const getActiveAside = () => {
   return route.path;
 };
 
+// 监听窗口大小变化
+const handleResize = () => {
+  const screenWidth = window.innerWidth;
+  if (screenWidth < 768) {
+    isCollapse.value = true; // 小屏幕下默认菜单栏收起
+  } else {
+    isCollapse.value = false; // 大屏幕下默认菜单栏展开
+  }
+};
+
+// 在组件挂载时设置初始状态，并监听窗口大小变化
+onMounted(() => {
+  handleResize();
+  window.addEventListener('resize', handleResize);
+});
+
+// 在组件卸载时移除事件监听器
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 // 退出登陆时出现确认弹窗
 const loginUserStore = useLoginUserStore();
 const quitFn = () => {
@@ -176,6 +197,7 @@ const quitFn = () => {
                 src="@/assets/icons/github.svg"
                 alt="Github"
                 style="width: 36px; height: 36px; transform: translate(0px, 12px);"
+                class="github-icon"
             />
           </a>
         </el-header>
@@ -229,7 +251,18 @@ const quitFn = () => {
     background-color: #F7F7F7;
     border-color: #D1D1D1;
     color: #333333;
+  }
 
+  @media (max-width: 768px) {
+    .el-dropdown, .el-dropdown .el-button {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .github-icon {
+    display: none;
   }
 }
 

@@ -64,7 +64,8 @@ const constantRoute = [
         meta: {
           title: 'MyStocks',
           icon: 'Document',
-          requiresAuth: false,
+          requiresAuth: true,
+          roles: [0, 1]
         },
       },
       {
@@ -85,7 +86,8 @@ const constantRoute = [
         meta: {
           title: 'Profile',
           icon: 'User',
-          requiresAuth: false,
+          requiresAuth: true,
+          roles: [0, 1]
         },
       },
     ],

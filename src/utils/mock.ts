@@ -76,7 +76,7 @@ Mock.mock('/api/user/fixpwd', 'put', (options) => {
 
 // 模拟分页展示用户数据
 const userPageListMockAPI = Mock.mock({
-    'items|200': [
+    'data|200': [
         {
             'id|+1': 1,
             username: '@name',
@@ -94,12 +94,12 @@ Mock.mock(/\/user\/page/, 'get', (options: any) => {
     const size = parseInt(urlParams.get('size') || '20');
     const startIndex = (page - 1) * size;
     const endIndex = startIndex + size;
-    const items = userPageListMockAPI.items.slice(startIndex, endIndex);
+    const data = userPageListMockAPI.data.slice(startIndex, endIndex);
     return {
         code: 0,
         data: {
-            items,
-            total: userPageListMockAPI.items.length,
+            data,
+            total: userPageListMockAPI.data.length,
         },
     };
 });

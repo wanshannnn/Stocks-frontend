@@ -22,7 +22,7 @@ const activities = ref([
 <template>
   <el-row class="profile-container">
     <!-- 左侧个人信息 -->
-    <el-col :span="8" class="personal-info">
+    <el-col :xs="24" :sm="24" :md="10" class="personal-info">
       <!-- 用户头像和简介 -->
       <el-card shadow="never" class="user-info-card">
         <el-row>
@@ -30,24 +30,24 @@ const activities = ref([
             <el-avatar class="user-avatar" size="large">U</el-avatar>
           </el-col>
           <el-col :span="16">
-            <h3>{{ user.name }}</h3>
-            <p>{{ user.bio }}</p>
+            <p class="profile-title">{{ user.name }}</p>
+            <p class="profile-text">{{ user.bio }}</p>
           </el-col>
         </el-row>
         <!-- Follower 和 Following -->
         <el-card shadow="never" class="follow-info-card">
           <el-row justify="space-between" align="middle">
-            <el-col :span="8" class="stat">
-              <p>Follower</p>
-              <h3>{{ user.followerCount }}</h3>
+            <el-col :xs="12" :span="8" class="stat">
+              <p class="profile-text">Follower</p>
+              <p>{{ user.followerCount }}</p>
             </el-col>
-            <el-col :span="8" class="stat">
-              <p>Following</p>
-              <h3>{{ user.followingCount }}</h3>
+            <el-col :xs="12" :span="8" class="stat">
+              <p class="profile-text">Following</p>
+              <p>{{ user.followingCount }}</p>
             </el-col>
-            <el-col :span="8" class="stat">
-              <p>Passage</p>
-              <h3>{{ user.passageCount }}</h3>
+            <el-col :xs="0" :span="8" class="stat">
+              <p class="profile-text">Passage</p>
+              <p>{{ user.passageCount }}</p>
             </el-col>
           </el-row>
         </el-card>
@@ -55,16 +55,16 @@ const activities = ref([
     </el-col>
 
     <!-- 右侧个人动态 -->
-    <el-col :span="14" class="personal-news">
+    <el-col :xs="24" :sm="24" :md="12" class="personal-news">
       <el-card shadow="never" class="news-card">
-        <h3>Personal Activity</h3>
+        <p class="profile-title">Personal Activity</p>
         <el-timeline>
           <el-timeline-item
               v-for="(activity, index) in activities"
               :key="index"
               :timestamp="activity.timestamp"
               placement="bottom">
-            <p>{{ activity.message }}</p>
+            <p class="profile-text">{{ activity.message }}</p>
           </el-timeline-item>
         </el-timeline>
       </el-card>
@@ -78,6 +78,11 @@ const activities = ref([
   display: flex;
   gap: 20px;
 }
+@media(max-width: 768px) {
+  .profile-container {
+    margin: 5px;
+  }
+}
 
 .personal-info {
   display: flex;
@@ -90,13 +95,24 @@ const activities = ref([
   flex-direction: column;
 }
 
+
 .user-info-card {
   padding: 20px;
+}
+@media(max-width: 768px) {
+  .user-info-card {
+    padding: 5px;
+  }
 }
 
 .news-card {
   padding: 20px;
   height: 100%;
+}
+@media(max-width: 768px) {
+  .news-card {
+    padding: 5px;
+  }
 }
 
 .user-avatar {
@@ -107,7 +123,7 @@ const activities = ref([
   text-align: center;
 }
 
-h3 {
+.profile-title {
   margin: 10px;
   font-family: 'Georgia', serif;
   font-size: 20px;

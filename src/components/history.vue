@@ -116,6 +116,13 @@ onMounted(() => {
   if (!chartContainer.value) {
     console.error("Chart container is not initialized.");
   }
+
+  // 在窗口大小改变时调整图表大小
+  window.addEventListener("resize", () => {
+    if (chart) {
+      chart.resize();
+    }
+  });
 });
 </script>
 
@@ -127,7 +134,7 @@ onMounted(() => {
     <el-col :span="16">
       <el-input
           v-model="input"
-          placeholder="Please fill in the stock code"
+          placeholder="请填写股票代码"
           clearable
       />
     </el-col>
@@ -139,12 +146,13 @@ onMounted(() => {
 p {
   margin: 5px;
   font-family: 'Georgia', serif;
-  font-size: 20px;
+  font-size: min(2vw, 20px);
   font-weight: bold;
   color: var(--color-text-primary);
 }
 
 .chart-container {
   padding: 20px;
+  margin-top: 20px;
 }
 </style>

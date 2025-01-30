@@ -39,25 +39,25 @@ onMounted(async () => {
   <div class="dashboard-container">
     <!-- 指数 -->
     <el-row>
-      <el-col :span="6">
+      <el-col :xs="24" :span="6">
         <div class="index-container">
           <h3>SHCOMP</h3>
           <h4>{{ indexes.SHCOMP }}</h4>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :span="6">
         <div class="index-container">
           <h3>SZCOMP</h3>
           <h4>{{ indexes.SZCOMP }}</h4>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :span="6">
         <div class="index-container">
           <h3>ChiNext</h3>
           <h4>{{ indexes.ChiNext }}</h4>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :span="6">
         <div class="index-container">
           <h3>CSI300</h3>
           <h4>{{ indexes.CSI300 }}</h4>
@@ -67,13 +67,13 @@ onMounted(async () => {
 
     <el-row>
       <!-- 趋势图-->
-      <el-col :span="8">
+      <el-col :xs="24" :sm="12" :md="10">
         <div class="history-graph-container">
           <History/>
         </div>
       </el-col>
       <!-- 最新数据 -->
-      <el-col :span="16">
+      <el-col :xs="24" :sm="12" :md="14">
         <div class="latest-stock-container">
           <Latest/>
         </div>
@@ -101,16 +101,19 @@ onMounted(async () => {
 }
 
 h3 {
-  margin-left: 20px;
+  margin: 10px;
+  text-align: center;
   font-family: 'Georgia', serif;
-  font-size: 20px;
+  font-size: max(1.2vw, 10px);
   font-weight: bold;
   color: var(--color-text-primary);
 }
 
 h4 {
-  margin-left: 20px;
-  font-size: 16px;
+  margin: 10px;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: max(1.2vw, 10px);
   font-weight: bold;
   color: var(--color-text-secondary);
 }
@@ -121,13 +124,24 @@ h4 {
   box-sizing: border-box;
   margin: 20px;
 }
+@media(max-width: 768px) {
+  .index-container {
+    margin: 5px;
+  }
+}
 
 .history-graph-container {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   box-sizing: border-box;
   padding: 20px;
-  margin: 20px;
+  margin: 10px;
+}
+@media(max-width: 768px) {
+  .history-graph-container {
+    padding: 10px;
+    margin: 5px;
+  }
 }
 
 .latest-stock-container {
@@ -135,6 +149,12 @@ h4 {
   border-radius: 6px;
   box-sizing: border-box;
   padding: 20px;
-  margin: 20px;
+  margin: 10px;
+}
+@media(max-width: 768px) {
+  .latest-stock-container {
+    padding: 10px;
+    margin: 5px;
+  }
 }
 </style>
