@@ -53,10 +53,10 @@ const login = async () => {
         <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginRef">
           <h1>Stocks 身份认证</h1>
           <el-form-item prop="username">
-            <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
+            <el-input placeholder="请输入用户名" :prefix-icon="User" v-model="loginForm.username"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input :prefix-icon="Lock" v-model="loginForm.password"></el-input>
+            <el-input type="password" placeholder="请输入密码" :prefix-icon="Lock" v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item class="login_and_register">
             <el-button class="login_btn" type="primary" @click="login">登陆</el-button>
