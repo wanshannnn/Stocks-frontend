@@ -22,11 +22,11 @@
 
 顶部导航栏展示用户登陆信息
 
-<img src="/README/dashboard-unlogin.png">
+<img src="/README/dashboard-nouser.png">
 
 已处于登陆状态时，下拉框进行修改密码和退出登陆操作
 
-<img src="/README/dashboard.png">
+<img src="/README/dashboard-user.png">
 
 <img src="/README/dashboard-fix-password.png">
 
